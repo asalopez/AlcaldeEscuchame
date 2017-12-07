@@ -11,7 +11,9 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
 import os
+from ctypes import cast
 import posixpath
+from decouple import config
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -21,10 +23,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '951cc53c-d791-4170-ad4d-b32e41a0dc17'
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = []
 
@@ -32,7 +34,6 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'app',
     # Add your apps here to enable them
     'django.contrib.admin',
     'django.contrib.auth',
@@ -40,6 +41,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Own apps
+    'app',
+    'usuarios.apps.usuariosConfig',
+    'quejas.apps.quejasConfig',
+    'categorias.apps.categoriasConfig',
+    'comentarios.apps.comentariosConfig',
+    'corpus.apps.corpusConfig'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -79,11 +88,14 @@ WSGI_APPLICATION = 'AlcaldeEscuchame.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': config('DB_ENGINE'),
+        'NAME': os.path.join(BASE_DIR, config('DB_NAME')),
     }
 }
 
+# Extending User Model
+# https://docs.djangoproject.com/en/1.11/topics/auth/customizing/#extending-user
+# AUTH_USER_MODEL = ''
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
