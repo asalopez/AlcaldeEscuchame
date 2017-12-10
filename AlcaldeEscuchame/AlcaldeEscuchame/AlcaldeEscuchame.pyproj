@@ -109,6 +109,7 @@
     <Folder Include="usuarios\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\templates\app\registro.html" />
     <Content Include="categorias\templates\index.html" />
     <Content Include="comentarios\templates\index.html" />
     <Content Include="corpus\templates\index.html" />

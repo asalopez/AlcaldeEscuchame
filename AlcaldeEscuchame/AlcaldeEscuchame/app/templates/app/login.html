@@ -1,23 +1,39 @@
 {% extends "app/layout.html" %}
 
+<!-- CONTENIDO -->
 {% block content %}
 
+<!-- Si ya est&#225; logueado, redirect a la p&#225;gina de inicio -->
+{% if user.is_authenticated %}
+
+<!-- <script type="text/javascript">
+    window.location="/";
+</script> -->
+
+<meta http-equiv="refresh" content="0;url=/">
+
+
+<!-- Si es usuario an&#243;nimo -->
+{% else %}
+
 <h2>{{ title }}</h2>
+
 <div class="row">
     <div class="col-md-8">
+
         <section id="loginForm">
             <form action="." method="post" class="form-horizontal">
                 {% csrf_token %}
-                <h4>Use a local account to log in.</h4>
+                <h4>Use sus credenciales para iniciar sesi&#243;n.</h4>
                 <hr />
                 <div class="form-group">
-                    <label for="id_username" class="col-md-2 control-label">User name</label>
+                    <label for="id_username" class="col-md-2 control-label">Nombre de usuario</label>
                     <div class="col-md-10">
                         {{ form.username }}
                     </div>
                 </div>
                 <div class="form-group">
-                    <label for="id_password" class="col-md-2 control-label">Password</label>
+                    <label for="id_password" class="col-md-2 control-label">Contrase&#241;a</label>
                     <div class="col-md-10">
                         {{ form.password }}
                     </div>
@@ -25,22 +41,26 @@
                 <div class="form-group">
                     <div class="col-md-offset-2 col-md-10">
                         <input type="hidden" name="next" value="/" />
-                        <input type="submit" value="Log in" class="btn btn-default" />
+                        <input type="submit" value="Iniciar Sesi&#243;n" class="btn btn-default" />
                     </div>
                 </div>
                 {% if form.errors %}
-                <p class="validation-summary-errors">Please enter a correct user name and password.</p>
+                <p class="validation-summary-errors">Por favor, introduzca un nombre de usuario y contrase&#241;a v&#225;lidos.</p>
                 {% endif %}
             </form>
         </section>
+
     </div>
+
     <div class="col-md-4">
         <section id="socialLoginForm"></section>
     </div>
 </div>
 
-{% endblock %}
+{% endif %}
 
+{% endblock %}
+<!-- FIN CONTENIDO -->
 
 {% block scripts %}
 

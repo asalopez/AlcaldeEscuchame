@@ -1,0 +1,118 @@
+{% extends "app/layout.html" %}
+
+<!-- CONTENIDO -->
+{% block content %}
+
+<h2>{{ title }}</h2>
+
+<div class="row">
+    <div class="col-md-8">
+
+        <section id="registroForm">
+            <form action="{% url 'registro' %}" method="post" class="form-horizontal">
+                {% csrf_token %}
+                {#<h4>Use sus credenciales para iniciar sesi&#243;n.</h4>#}
+                <hr />
+
+                <!-- Usuario -->
+                <div class="form-group">
+                    <label for="id_username" class="col-md-2 control-label">Nombre de usuario</label>
+                    <div class="col-md-10">
+                        {{ form.username }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_password" class="col-md-2 control-label">Contrase&#241;a</label>
+                    <div class="col-md-10">
+                        {{ form.password }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_password" class="col-md-2 control-label">Confirmar Contrase&#241;a</label>
+                    <div class="col-md-10">
+                        {{ form.confirm_password }}
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="form-group">
+                    <label for="id_firstName" class="col-md-2 control-label">Nombre</label>
+                    <div class="col-md-10">
+                        {{ form.first_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_lastName" class="col-md-2 control-label">Apellidos</label>
+                    <div class="col-md-10">
+                        {{ form.last_name }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_email" class="col-md-2 control-label">Email</label>
+                    <div class="col-md-10">
+                        {{ form.email }}
+                    </div>
+                </div>
+                <!-- Fin Usuario -->
+
+                <!-- Ciudadano-->
+                <div class="form-group">
+                    <label for="id_poblacion" class="col-md-2 control-label">Poblaci&#243;n</label>
+                    <div class="col-md-10">
+                        {{ form.poblacion }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_telefono" class="col-md-2 control-label">Tel&#233;fono</label>
+                    <div class="col-md-10">
+                        {{ form.telefono }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_direccion" class="col-md-2 control-label">Direcci&#243;n</label>
+                    <div class="col-md-10">
+                        {{ form.direccion }}
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="id_foto" class="col-md-2 control-label">Foto de perfil</label>
+                    <div class="col-md-10">
+                        {{ form.foto }}
+                    </div>
+                </div>
+                <!-- Fin Ciudadano -->
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="hidden" name="next" value="/" />
+                        <input type="submit" value="Registrarse" class="btn btn-default" />
+                        <input type="button" class="btn btn-default" onclick="location.href='/';" value="Cancelar" />
+                    </div>
+                </div>
+
+                {% if form.non_field_errors %}
+                    <p class="validation-summary-errors">{{ form.non_field_errors }}</p>
+                {% else %}
+                    <p class="validation-summary-errors">{{ form.errors }}</p>
+                {% endif %}
+
+            </form>
+        </section>
+
+    </div>
+
+    <div class="col-md-4">
+        <section id="socialLoginForm"></section>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load staticfiles %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+
+{% endblock %}

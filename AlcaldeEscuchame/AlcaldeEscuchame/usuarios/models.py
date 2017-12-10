@@ -13,14 +13,14 @@ class Actor(models.Model):
                            validators = [RegexValidator(regex = r'((.png)|(.jpg)|(.jpge))$', message = 'La URL no corresponde con una imagen en formato especificado.')]);
 
 class Ciudadano(Actor):
-    usuario = models.ForeignKey('auth.User', null = True);
-
+    usuario = models.OneToOneField('auth.User', unique = True, null = True);
+    
     def __str__(self):
         return self.usuario.get_full_name() + ' (' + self.usuario.get_username() + ')';
 
 
 class Funcionario(Actor):
-    usuario = models.ForeignKey('auth.User', null = True);
+    usuario = models.OneToOneField('auth.User', unique = True, null = True);
 
     # Relaciones
     categorias = models.ManyToManyField(Categoria);
@@ -29,7 +29,7 @@ class Funcionario(Actor):
         return self.usuario.get_full_name() + ' (' + self.usuario.get_username() + ')';
 
 class Administrador(Actor):
-    usuario = models.ForeignKey('auth.User', null = True);
+    usuario = models.OneToOneField('auth.User', unique = True, null = True);
 
     def __str__(self):
         return self.usuario.get_full_name() + ' (' + self.usuario.get_username() + ')';

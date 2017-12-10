@@ -1,17 +1,21 @@
+<!-- USUARIOS AUTENTICADOS -->
 {% if user.is_authenticated %}
+
 <form id="logoutForm" action="/logout" method="post" class="navbar-right">
     {% csrf_token %}
     <ul class="nav navbar-nav navbar-right">
-        <li><span class="navbar-brand">Hello {{ user.username }}!</span></li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        <li><span class="navbar-brand">&#161;Hola {{ user.first_name }}!</span></li>
+        <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar Sesi&#243;n</a></li>
     </ul>
 
 </form>
 
 {% else %}
 
+<!-- USUARIOS NO AUTENTICADOS -->
 <ul class="nav navbar-nav navbar-right">
-    <li><a href="{% url 'login' %}">Log in</a></li>
+    <li><a href="{% url 'login' %}">Iniciar Sesi&#243;n</a></li>
+    <li><a href="{% url 'registro' %}">Registrarse</a></li>
 </ul>
 
 {% endif %}

@@ -10,6 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.9/ref/settings/
 """
 
+#encoding:utf-8
+
 import os
 from ctypes import cast
 import posixpath
