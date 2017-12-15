@@ -9,6 +9,7 @@ import django.contrib.auth.views
 
 import app.forms
 import app.views
+from usuarios import views as usuarios_views
 
 # Uncomment the next lines to enable the admin:
 from django.conf.urls import include
@@ -44,4 +45,8 @@ urlpatterns = [
 
      # Categorias
      url(r'^categorias/', include('categorias.urls')),
+
+     # Editar Perfil
+     url(r'^perfil$', usuarios_views.perfil, name='perfil'),
+
 ]

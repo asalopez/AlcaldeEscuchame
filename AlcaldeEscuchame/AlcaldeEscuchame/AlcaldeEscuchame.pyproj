@@ -144,7 +144,9 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
+    <Content Include="usuarios\templates\perfil.html" />
     <Content Include="usuarios\templates\index.html" />
+    <Content Include="usuarios\templates\editarPerfi.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.html">

@@ -5,6 +5,7 @@
     {% csrf_token %}
     <ul class="nav navbar-nav navbar-right">
         <li><span class="navbar-brand">&#161;Hola {{ user.first_name }}!</span></li>
+        <li><a href="{% url 'perfil' %}">Mi perfil</a></li>
         <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar Sesi&#243;n</a></li>
     </ul>
 
