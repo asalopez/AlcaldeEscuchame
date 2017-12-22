@@ -4,7 +4,8 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>AlcaldeEscuchame</Name>
     <RootNamespace>AlcaldeEscuchame</RootNamespace>
-    <InterpreterId>MSBuild|env|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|Env_Acer|$(MSBuildProjectFullPath)</InterpreterId>
+    <WebBrowserPort>5555</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -71,13 +72,20 @@
     <Compile Include="quejas\migrations\__init__.py" />
     <Compile Include="quejas\models.py" />
     <Compile Include="quejas\tests.py" />
+    <Compile Include="quejas\urls.py" />
     <Compile Include="quejas\views.py" />
     <Compile Include="quejas\__init__.py" />
     <Compile Include="usuarios\admin.py" />
     <Compile Include="usuarios\apps.py" />
+    <Compile Include="usuarios\forms.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="usuarios\migrations\__init__.py" />
     <Compile Include="usuarios\models.py" />
     <Compile Include="usuarios\tests.py" />
+    <Compile Include="usuarios\urls.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="usuarios\views.py" />
     <Compile Include="usuarios\__init__.py" />
   </ItemGroup>
@@ -110,10 +118,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\templates\app\registro.html" />
-    <Content Include="categorias\templates\index.html" />
+    <Content Include="categorias\templates\listadoCategorias.html" />
     <Content Include="comentarios\templates\index.html" />
     <Content Include="corpus\templates\index.html" />
-    <Content Include="quejas\templates\index.html" />
+    <Content Include="quejas\templates\listadoQuejas.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />
@@ -144,9 +152,8 @@
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />
     <Content Include="app\templates\app\loginpartial.html" />
+    <Content Include="usuarios\templates\edicionPerfil.html" />
     <Content Include="usuarios\templates\perfil.html" />
-    <Content Include="usuarios\templates\index.html" />
-    <Content Include="usuarios\templates\editarPerfi.html" />
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.html">
@@ -154,10 +161,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="env\">
-      <Id>env</Id>
+    <Interpreter Include="Env_Acer\">
+      <Id>Env_Acer</Id>
       <Version>3.6</Version>
-      <Description>env (Python 3.6 (64-bit))</Description>
+      <Description>Env_Acer (Python 3.6 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>

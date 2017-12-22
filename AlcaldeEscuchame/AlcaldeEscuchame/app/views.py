@@ -21,7 +21,7 @@ def home(request):
         request,
         'app/index.html',
         {
-            'title':'Bienvenido',
+            'titulo':'Bienvenido',
             'year':datetime.now().year,
         }
     )
@@ -33,8 +33,8 @@ def contact(request):
         request,
         'app/contact.html',
         {
-            'title':'Contacto',
-            'message':'Página de contacto',
+            'titulo':'Contacto',
+            'descripcion':'Página de contacto',
             'year':datetime.now().year,
         }
     )
@@ -46,8 +46,8 @@ def about(request):
         request,
         'app/about.html',
         {
-            'title':'About',
-            'message':'Your application description page.',
+            'titulo':'About',
+            'descripcion':'Your application description page.',
             'year':datetime.now().year,
         }
     )
@@ -70,11 +70,7 @@ def registro(request):
             confirm_password = form.cleaned_data["confirm_password"]
             email = form.cleaned_data["email"]
             first_name = form.cleaned_data["first_name"]
-            last_name = form.cleaned_data["last_name"]
-
-            # Valida confirmación password
-            print(password)
-            print(confirm_password)                
+            last_name = form.cleaned_data["last_name"]              
 
             user = User.objects.create_user(username, email, password)
             user.first_name = first_name
@@ -100,7 +96,7 @@ def registro(request):
     # Datos del modelo (vista)
     data = {
         'form': form,
-        'title': 'Registro de ciudadano',
+        'titulo': 'Registro de ciudadano',
         'year': datetime.now().year,
     }
         

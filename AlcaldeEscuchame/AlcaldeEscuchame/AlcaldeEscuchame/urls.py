@@ -27,7 +27,7 @@ urlpatterns = [
             'authentication_form': app.forms.BootstrapAuthenticationForm,
             'extra_context':
             {
-                'title': 'Inicio de sesión',
+                'titulo': 'Inicio de sesión',
                 'year': datetime.now().year,
             }
         },
@@ -46,7 +46,10 @@ urlpatterns = [
      # Categorias
      url(r'^categorias/', include('categorias.urls')),
 
-     # Editar Perfil
-     url(r'^perfil$', usuarios_views.perfil, name='perfil'),
+     # Quejas
+     url(r'^quejas/', include('quejas.urls')),
+
+     # Perfil de usuario
+     url(r'^perfil/', include('usuarios.urls')),
 
 ]

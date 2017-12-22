@@ -1,0 +1,67 @@
+{% extends "app/layout.html" %}
+
+<!-- CONTENIDO -->
+{% block content %}
+
+<h2>{{ titulo }}</h2>
+
+<div class="container-fluid">
+        <!-- Nueva Queja -->
+        {% if actor == 'Ciudadano' %}
+        <div class="col-md-5 toppad pull-right col-md-offset-3 ">
+            <a href="/add/" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span>   Nueva Queja</a>
+        </div>
+        {% endif %}
+
+        <hr/>
+
+        <!-- TABLA -->
+        <div class="table-responsive">
+            <table class="table table-striped table-hover custab">            
+                <thead>
+                    <tr>
+                        <th>Publicaci&#243;n</th>
+                        <th class="text-center">Estado</th>
+                        <th>Nombre</th>
+                        <th>Descripci&#243;n</th>
+                        <th class="text-center"></th> 
+                        {% if actor == 'Ciudadano' or actor == 'Administrador' %} <!-- TODO: Solo para el Ciudadano autor de la queja -->
+                        <th class="text-center"></th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for queja in quejas %}
+                    <tr>
+                        <td>{{ queja.fecha | date:'d/m/Y (H:i)' }}</td>
+                        <td class="text-center">
+                            {% if queja.estado == 'Abierta' %}
+                                <span class="label label-medium label-success">{{ queja.estado | upper }}</span>
+                            {% else %}
+                                <span class="label label-danger">{{ queja.estado | upper }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ queja.titulo }}</td>
+                        <td width="40%">{{ queja.cuerpo | truncatewords:20 }}</td>
+                        <td class="text-center"><a class='btn btn-info btn-xs' href="/display/{{queja.id}}/"><span class="glyphicon glyphicon-eye-open"> </span> Ver M&#225;s</a></td>
+                        {% if actor == 'Ciudadano' %} <!-- TODO: Solo para el Ciudadano autor de la queja -->
+                        <td class="text-center"><a class='btn btn-warning btn-xs' href="/edit/{{queja.id}}/"><span class="glyphicon glyphicon-edit">   </span> Editar</a></td>
+                        {% elif actor == 'Administrador' %}
+                        <td class="text-center"><a class='btn btn-danger btn-xs' href="/admin/quejas/queja/{{queja.id}}/delete/"><span class="glyphicon glyphicon-trash">   </span> Eliminar</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>        
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load staticfiles %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+
+{% endblock %}
