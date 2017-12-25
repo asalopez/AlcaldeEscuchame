@@ -27,6 +27,7 @@ def perfil(request):
     # Datos del modelo (vista)
     data = {
         'actor': actor,
+        'tipoActor': actor.__class__.__name__,
         'titulo': 'Perfil de usuario',
         'fecha': date.today(),
         'year': datetime.now().year,

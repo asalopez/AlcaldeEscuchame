@@ -4,11 +4,15 @@
 <form id="logoutForm" action="/logout" method="post" class="navbar-right">
     {% csrf_token %}
     <ul class="nav navbar-nav navbar-right">
-        <li><span class="navbar-brand">&#161;Hola {{ user.first_name }}!</span></li>
-        <li><a href="{% url 'perfil' %}">Mi perfil</a></li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar Sesi&#243;n</a></li>
+        <li><a href="#" class="navbar-brand dropdown-toggle" data-toggle="dropdown">&#161; Hola {{ user.first_name }} ! <span><i class="glyphicon glyphicon-user"></i></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'perfil' %}">Mi perfil</a></li>
+                <li class="divider"></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar Sesi&#243;n</a></li>
+            </ul>
+        
+        </li>        
     </ul>
-
 </form>
 
 {% else %}

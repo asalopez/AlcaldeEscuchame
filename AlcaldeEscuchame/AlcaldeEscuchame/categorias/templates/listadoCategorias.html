@@ -32,10 +32,10 @@
                 <tbody>
                     {% for categoria in categorias %}
                     <tr>
-                        <td><img alt="imagen" src="{{ categoria.imagen|default:"http://i68.tinypic.com/4fwz6h.png" }}" class="img-thumbnail img-responsive"></td>
+                        <td><img alt="{{ categoria.nombre }}" src="{{ categoria.imagen }}" class="img-thumbnail img-responsive"></td>
                         <td>{{ categoria.nombre }}</td>
                         <td>{{ categoria.descripcion }}</td>
-                        <td class="text-center"><a class='btn btn-info btn-md' href="#"><span class="glyphicon glyphicon-eye-open"> </span> Ver Quejas</a></td>
+                        <td class="text-center"><a class='btn btn-info btn-md' href="/quejas/categoria/{{categoria.id}}/"><span class="glyphicon glyphicon-eye-open"> </span> Ver Quejas</a></td>
                         {% if actor == 'Administrador' %}
                         <td class="text-center"><a class='btn btn-warning btn-md' href="/admin/categorias/categoria/{{categoria.id}}/change/"><span class="glyphicon glyphicon-edit">   </span> Editar</a></td>
                         {% endif %}

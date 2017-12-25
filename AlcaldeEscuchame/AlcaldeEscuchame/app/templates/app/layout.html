@@ -29,7 +29,8 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Quejas</a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'quejas' %}">Últimas Quejas</a></li>
-                            <li><a href="{% url 'quejas' %}">Mis Quejas</a></li>
+                            <!-- Definir solo para ciudadanos -->
+                            <li><a href="{% url 'quejasPropias' %}">Mis Quejas</a></li>
                         </ul>
                     </li>                    
                     <li><a href="{% url 'categorias' %}">Categorías</a></li>
@@ -37,6 +38,8 @@
                     <li><a href="{% url 'about' %}">About</a></li>
                     <li><a href="{% url 'contacto' %}">Contacto</a></li>
                 </ul>
+                <!-- Buscador de quejas -->
+                {% include 'buscador.html' %}
                 <!-- Inicio/Cierre de sesión -->
                 {% include 'app/loginpartial.html' %}
             </div>
