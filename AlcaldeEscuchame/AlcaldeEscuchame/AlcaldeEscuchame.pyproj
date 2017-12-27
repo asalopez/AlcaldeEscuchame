@@ -4,7 +4,7 @@
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <Name>AlcaldeEscuchame</Name>
     <RootNamespace>AlcaldeEscuchame</RootNamespace>
-    <InterpreterId>MSBuild|Env_Acer|$(MSBuildProjectFullPath)</InterpreterId>
+    <InterpreterId>MSBuild|EnvAcer|$(MSBuildProjectFullPath)</InterpreterId>
     <WebBrowserPort>5555</WebBrowserPort>
   </PropertyGroup>
   <PropertyGroup>
@@ -121,6 +121,7 @@
     <Content Include="categorias\templates\listadoCategorias.html" />
     <Content Include="comentarios\templates\index.html" />
     <Content Include="corpus\templates\index.html" />
+    <Content Include="quejas\templates\buscador.html" />
     <Content Include="quejas\templates\listadoQuejas.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
@@ -161,10 +162,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Interpreter Include="Env_Acer\">
-      <Id>Env_Acer</Id>
+    <Interpreter Include="EnvAcer\">
+      <Id>EnvAcer</Id>
       <Version>3.6</Version>
-      <Description>Env_Acer (Python 3.6 (64-bit))</Description>
+      <Description>EnvAcer (Python 3.6 (64-bit))</Description>
       <InterpreterPath>Scripts\python.exe</InterpreterPath>
       <WindowsInterpreterPath>Scripts\pythonw.exe</WindowsInterpreterPath>
       <PathEnvironmentVariable>PYTHONPATH</PathEnvironmentVariable>

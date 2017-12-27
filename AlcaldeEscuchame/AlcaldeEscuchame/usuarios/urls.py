@@ -10,7 +10,7 @@ import django.contrib.auth.views
 
 urlpatterns = [
     url(r'^$', views.perfil, name='perfil'),
-    url(r'^edit/$', views.editarPerfil, name='editarPerfil'),
+    url(r'^editar/$', views.editarPerfil, name='editarPerfil'),
 
 ]
 

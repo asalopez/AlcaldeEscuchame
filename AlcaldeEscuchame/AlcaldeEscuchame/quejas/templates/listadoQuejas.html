@@ -21,19 +21,24 @@
                 <thead>
                     <tr>
                         <th>Publicaci&#243;n</th>
+                        <th style="width:10%;">Categor&#237;a</th>
                         <th class="text-center">Estado</th>
                         <th>Nombre</th>
-                        <th>Descripci&#243;n</th>
-                        <th class="text-center"></th> 
-                        {% if actor == 'Ciudadano' or actor == 'Administrador' %} <!-- TODO: Solo para el Ciudadano autor de la queja -->
-                        <th class="text-center"></th>
+                        <th style="width:10%;">Descripci&#243;n</th>
+                        {% if actor == 'Administrador' or actor == 'Funcionario' %}
+                        <th style="width:10%;">Categorizaci&#243;n</th>
                         {% endif %}
+                        <th class="text-center"></th> 
                     </tr>
                 </thead>
                 <tbody>
                     {% for queja in quejas %}
                     <tr>
-                        <td>{{ queja.fecha | date:'d/m/Y (H:i)' }}</td>
+                        <td class="text-center">{{ queja.fecha | date:'d/m/Y (H:i)' }}</td>
+                        <td class="text-center">
+                            <img alt="{{ queja.categoriaManual.nombre }}" src="{{ queja.categoriaManual.imagen }}" class="img-rounded img-responsive">
+                            <span style="font-size: 75%;">{{ queja.categoriaManual.nombre }}</span>
+                        </td>
                         <td class="text-center">
                             {% if queja.estado == 'Abierta' %}
                                 <span class="label label-medium label-success">{{ queja.estado | upper }}</span>
@@ -42,13 +47,21 @@
                             {% endif %}
                         </td>
                         <td>{{ queja.titulo }}</td>
-                        <td width="40%">{{ queja.cuerpo | truncatewords:20 }}</td>
-                        <td class="text-center"><a class='btn btn-info btn-xs' href="/display/{{queja.id}}/"><span class="glyphicon glyphicon-eye-open"> </span> Ver M&#225;s</a></td>
-                        {% if actor == 'Ciudadano' %} <!-- TODO: Solo para el Ciudadano autor de la queja -->
-                        <td class="text-center"><a class='btn btn-warning btn-xs' href="/edit/{{queja.id}}/"><span class="glyphicon glyphicon-edit">   </span> Editar</a></td>
-                        {% elif actor == 'Administrador' %}
-                        <td class="text-center"><a class='btn btn-danger btn-xs' href="/admin/quejas/queja/{{queja.id}}/delete/"><span class="glyphicon glyphicon-trash">   </span> Eliminar</a></td>
+                        <td width="40%">{{ queja.cuerpo | truncatewords:30 }}</td>
+                        {% if actor == 'Administrador' or actor == 'Funcionario' %}
+                            <td class="text-center">
+                                <img alt="{{ queja.categoriaAutomatica.nombre }}" src="{{ queja.categoriaManual.imagen }}" class="img-rounded img-responsive">
+                                <span style="font-size: 75%;">{{ queja.categoriaAutomatica.nombre }}</span>
+                            </td>
                         {% endif %}
+                        <td class="text-center">
+                            <div style="margin:2px;"><a class='btn btn-info btn-xs' href="/quejas/{{queja.id}}/"><span class="glyphicon glyphicon-eye-open"> </span> Ver M&#225;s</a></div>
+                            {% if actor == 'Ciudadano' %} <!-- TODO: Solo para el Ciudadano autor de la queja -->
+                            <div style="margin:2px;"><a class='btn btn-warning btn-xs' href="/quejas/{{queja.id}}/editar/"><span class="glyphicon glyphicon-edit">   </span> Editar</a></div>
+                            {% elif actor == 'Administrador' %}
+                            <div style="margin:2px;"><a class='btn btn-danger btn-xs' href="/admin/quejas/queja/{{queja.id}}/delete/"><span class="glyphicon glyphicon-trash">   </span> Eliminar</a></div>
+                            {% endif %}
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
