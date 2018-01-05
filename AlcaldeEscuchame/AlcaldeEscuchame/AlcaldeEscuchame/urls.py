@@ -4,6 +4,8 @@ Definition of urls for AlcaldeEscuchame.
 #encoding:utf-8
 
 from datetime import datetime
+import comentarios
+from comentarios import views
 from django.conf.urls import url
 import django.contrib.auth.views
 
@@ -49,7 +51,9 @@ urlpatterns = [
      # Quejas
      url(r'^quejas/', include('quejas.urls')),
 
+     # Comentarios
+     url(r'^comentarios/', include('comentarios.urls')),
+
      # Perfil de usuario
      url(r'^perfil/', include('usuarios.urls')),
-
 ]

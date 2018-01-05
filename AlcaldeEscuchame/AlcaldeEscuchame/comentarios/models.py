@@ -10,7 +10,7 @@ class Comentario(models.Model):
 
     # Relaciones
     queja = models.ForeignKey(Queja, on_delete = models.CASCADE, null = True); # ManyToOne
-    autor = models.ForeignKey('auth.User', on_delete = models.CASCADE, null = True); # ManyToOne
+    autor = models.ForeignKey(Actor, on_delete = models.CASCADE, null = True); # ManyToOne
 
     def __str__(self):
         return self.titulo + ' (' + str(self.fecha) + ')';

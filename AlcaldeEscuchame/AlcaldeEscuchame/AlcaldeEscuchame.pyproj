@@ -50,9 +50,11 @@
     <Compile Include="categorias\__init__.py" />
     <Compile Include="comentarios\admin.py" />
     <Compile Include="comentarios\apps.py" />
+    <Compile Include="comentarios\forms.py" />
     <Compile Include="comentarios\migrations\__init__.py" />
     <Compile Include="comentarios\models.py" />
     <Compile Include="comentarios\tests.py" />
+    <Compile Include="comentarios\urls.py" />
     <Compile Include="comentarios\views.py" />
     <Compile Include="comentarios\__init__.py" />
     <Compile Include="corpus\admin.py" />
@@ -69,6 +71,7 @@
     <Compile Include="AlcaldeEscuchame\wsgi.py" />
     <Compile Include="quejas\admin.py" />
     <Compile Include="quejas\apps.py" />
+    <Compile Include="quejas\forms.py" />
     <Compile Include="quejas\migrations\__init__.py" />
     <Compile Include="quejas\models.py" />
     <Compile Include="quejas\tests.py" />
@@ -117,12 +120,16 @@
     <Folder Include="usuarios\templates\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="app\static\app\content\comentarios.css" />
     <Content Include="app\templates\app\registro.html" />
     <Content Include="categorias\templates\listadoCategorias.html" />
-    <Content Include="comentarios\templates\index.html" />
+    <Content Include="comentarios\templates\listadoComentarios2.html" />
+    <Content Include="comentarios\templates\listadoComentarios.html" />
     <Content Include="corpus\templates\index.html" />
     <Content Include="quejas\templates\buscador.html" />
+    <Content Include="quejas\templates\formularioQueja.html" />
     <Content Include="quejas\templates\listadoQuejas.html" />
+    <Content Include="quejas\templates\detalleQueja.html" />
     <Content Include="requirements.txt" />
     <Content Include="db.sqlite3" />
     <Content Include="app\static\app\content\bootstrap.css" />

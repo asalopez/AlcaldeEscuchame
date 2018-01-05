@@ -9,7 +9,7 @@
         <!-- Nueva Queja -->
         {% if actor == 'Ciudadano' %}
         <div class="col-md-5 toppad pull-right col-md-offset-3 ">
-            <a href="/add/" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span>   Nueva Queja</a>
+            <a href="{% url 'nuevaQueja' %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span>&nbsp; Nueva Queja</a>
         </div>
         {% endif %}
 
@@ -50,16 +50,18 @@
                         <td width="40%">{{ queja.cuerpo | truncatewords:30 }}</td>
                         {% if actor == 'Administrador' or actor == 'Funcionario' %}
                             <td class="text-center">
-                                <img alt="{{ queja.categoriaAutomatica.nombre }}" src="{{ queja.categoriaManual.imagen }}" class="img-rounded img-responsive">
+                                <img alt="{{ queja.categoriaAutomatica.nombre }}" src="{{ queja.categoriaAutomatica.imagen }}" class="img-rounded img-responsive">
                                 <span style="font-size: 75%;">{{ queja.categoriaAutomatica.nombre }}</span>
                             </td>
                         {% endif %}
                         <td class="text-center">
                             <div style="margin:2px;"><a class='btn btn-info btn-xs' href="/quejas/{{queja.id}}/"><span class="glyphicon glyphicon-eye-open"> </span> Ver M&#225;s</a></div>
-                            {% if actor == 'Ciudadano' %} <!-- TODO: Solo para el Ciudadano autor de la queja -->
-                            <div style="margin:2px;"><a class='btn btn-warning btn-xs' href="/quejas/{{queja.id}}/editar/"><span class="glyphicon glyphicon-edit">   </span> Editar</a></div>
+                            <!-- Bot&#243;n Editar Queja: solo si es ciudadano, es su queja y sigue abierta -->
+                            {% if actor == 'Ciudadano' and queja.ciudadano == usuario.actor.ciudadano and queja.estado == 'Abierta' %} 
+                            <div style="margin:2px;"><a class='btn btn-warning btn-xs' href="{% url 'editarQueja' queja.id %}"><span class="glyphicon glyphicon-edit">&nbsp; </span> Editar</a></div>
+                            <!-- Bot&#243;n Eliminar Queja: solo si es administrador -->
                             {% elif actor == 'Administrador' %}
-                            <div style="margin:2px;"><a class='btn btn-danger btn-xs' href="/admin/quejas/queja/{{queja.id}}/delete/"><span class="glyphicon glyphicon-trash">   </span> Eliminar</a></div>
+                            <div style="margin:2px;"><a class='btn btn-danger btn-xs' href="/admin/quejas/queja/{{queja.id}}/delete/"><span class="glyphicon glyphicon-trash">&nbsp; </span> Eliminar</a></div>
                             {% endif %}
                         </td>
                     </tr>

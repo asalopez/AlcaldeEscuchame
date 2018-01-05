@@ -1,0 +1,73 @@
+{% extends "app/layout.html" %}
+
+<!-- CONTENIDO -->
+{% block content %}
+
+<h2>{{ titulo }}</h2>
+
+<div class="row">
+
+    <!-- Detalle Queja -->
+    <div class="container-fluid">
+        <br/>
+        <div class="well">
+            <div class="media">
+                <div class="media-body">
+                    <h3 class="media-heading">{{ queja.titulo }}</h3>
+                    <p class="text-right">{{ queja.ciudadano.usuario.get_full_name }}</p>
+                    <br/>
+                    <p>{{ queja.cuerpo }}</p>
+                    <br/>
+                    <ul class="list-inline list-unstyled">
+                        <li><span><i class="glyphicon glyphicon-calendar"></i> {{ queja.fecha | date:'d/m/Y (H:i)' }} </span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-comment"></i> {{ comentarios | length }} Comentarios</span></li>
+                        <li>|</li>
+                        <li>
+                            <!-- Rating de la queja: una estrella rellena por cada punto -->
+                            {% for i in rangoPuntos %}
+                                {% if i < rating %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {% else %}
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
+                            {% endfor %}
+                        </li>
+                        <li>|</li>
+                        <li>
+                            {% if queja.estado == 'Abierta' %}
+                                <span class="label label-medium label-success">{{ queja.estado | upper }}</span>
+                            {% else %}
+                                <span class="label label-danger">{{ queja.estado | upper }}</span>
+                            {% endif %}
+                        </li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-tag"></i> {{ queja.referencia }}</span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Categor&#237;a: <a href="/quejas/categoria/{{ queja.categoriaManual.id }}/">{{ queja.categoriaManual.nombre }}</a></span></li>
+                    </ul>
+                    {% if queja.estado == 'Abierta' and queja.ciudadano.usuario == actor %}
+                        <p class="text-right"><a href="{% url 'editarQueja' queja.id %}" class="btn btn-warning"><i class="glyphicon glyphicon-edit"></i>&nbsp; Editar Queja</a></p>
+                    {% elif actor.is_staff %}
+                        <p class="text-right"><a href="/admin/quejas/queja/{{queja.id}}/delete/" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp; Eliminar Queja</a></p>
+                    {% endif %}                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de Comentarios -->
+    {#{% include 'listadoComentarios.html' with comentarios=comentarios titulo='Comentarios' year=year %}#}
+    {% include 'listadoComentarios2.html' %}
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load staticfiles %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+
+{% endblock %}

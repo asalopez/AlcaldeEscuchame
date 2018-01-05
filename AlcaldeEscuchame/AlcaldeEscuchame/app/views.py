@@ -64,7 +64,7 @@ def registro(request):
     if (request.method == 'POST'):
         form = RegistroForm(request.POST)
         if (form.is_valid()):
-                # Guarda el User (model Django) en BD
+            # Guarda el User (model Django) en BD
             username = form.cleaned_data["username"]
             password = form.cleaned_data["password"]
             confirm_password = form.cleaned_data["confirm_password"]

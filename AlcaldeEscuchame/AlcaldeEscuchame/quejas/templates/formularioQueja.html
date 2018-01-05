@@ -1,0 +1,96 @@
+{% extends "app/layout.html" %}
+
+<!-- CONTENIDO -->
+{% block content %}
+
+<h2>{{ titulo }}</h2>
+
+<div class="row">
+
+    <div class="container-fluid">
+        <br/>
+        <div class="col-md-12 contact-form">
+
+            <!-- Formulario Queja -->
+            <form id="contact" method="post" class="form" role="form">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="titulo" class="control-label">T&#237;tulo</label>
+                        <input class="form-control" id="titulo" name="titulo" placeholder="T&#237;tulo" type="text" required autofocus value="{{ form.titulo.value|default:"" }}"/>
+                    </div>
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="categoria" class="control-label">Categor&#237;a</label>
+                        <select class="form-control" id="categoria" name="categoria" required>
+                            <!-- Si es una edici&#243;n: se marca la queja por defecto -->
+                            {% if form.categoria.value > 0 %}
+                                {% for c in categorias %}
+                                    {% if c.id == form.categoria.value %}
+                                    <option value="{{ c.id }}" selected="selected">{{ c.nombre }}</option>
+                                    {% else %}
+                                    <option value="{{ c.id }}">{{ c.nombre }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                            <!-- Si es una nueva queja: informaci&#243;n por defecto -->
+                            {% else %}
+                            <option value="" selected="selected">Seleccione una categor&#237;a</option>
+                                {% for c in categorias %}
+                                    <option value="{{ c.id }}">{{ c.nombre }}</option>
+                                {% endfor %}
+                            {% endif %}
+                        </select>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="autor" class="control-label">Autor</label>
+                        <input class="form-control" id="autor" readonly disabled value="{{ actor }}" />
+                    </div>
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="estado" class="control-label">Estado</label>
+                        <input class="form-control" id="estado" readonly disabled value="Abierta" />
+                    </div>
+                </div>
+                <label for="cuerpo" class="control-label">Contenido</label>
+                <textarea class="form-control" id="cuerpo" name="cuerpo" placeholder="Cu&#233;ntanos tu queja..." rows="8" required>{{ form.cuerpo.value|default:"" }}</textarea>
+                <br />
+                <!-- Tratamiento de errores -->
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ field.label|title }}: {{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                <!-- Botones -->
+                <div class="row">
+                    <div class="col-xs-12 col-md-12 form-group">
+                        <span class="pull-right">
+                            <button class="btn btn-primary btn-circle text-uppercase" type="submit" id="submit"><span class="glyphicon glyphicon-send"></span>&nbsp; Publicar queja</button>
+                            <a href="{% url 'quejas' %}" class="btn btn-warning">Cancelar</a>
+                        </span>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load staticfiles %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+
+{% endblock %}

@@ -8,6 +8,9 @@
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/bootstrap.min.css' %}" />
     <link rel="stylesheet" type="text/css" href="{% static 'app/content/site.css' %}" />
     <script src="{% static 'app/scripts/modernizr-2.6.2.js' %}"></script>
+    <!-- Bloque para CSS espec&#237;fico de algunas plantillas -->
+    {% block styles %}
+    {% endblock %}
 </head>
 
 <body>
@@ -29,8 +32,11 @@
                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">Quejas</a>
                         <ul class="dropdown-menu">
                             <li><a href="{% url 'quejas' %}">Últimas Quejas</a></li>
-                            <!-- Definir solo para ciudadanos -->
+                            <!-- Solo para ciudadanos -->
+                            {% if user.actor.ciudadano %}
                             <li><a href="{% url 'quejasPropias' %}">Mis Quejas</a></li>
+                            <li><a href="{% url 'nuevaQueja' %}">Publicar Queja</a></li>
+                            {% endif %}
                         </ul>
                     </li>                    
                     <li><a href="{% url 'categorias' %}">Categorías</a></li>
