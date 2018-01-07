@@ -16,6 +16,7 @@ urlpatterns = [
     url(r'^(?P<queja_id>\d+)/editar$', views.formularioQueja, name='editarQueja'),
     url(r'^(?P<queja_id>\d+)/eliminar$', views.eliminarQueja, name='eliminarQueja'),
     url(r'^(?P<queja_id>\d+)/tramitar', views.tramitarQueja, name='tramitarQueja'),
+    url(r'^valorar$', views.valorarQueja, name='valorarQueja'),
     url(r'^buscador$', views.listaQuejasBuscador, name='quejasBuscador'),
     url(r'^ciudadano/$', views.listaQuejasPropias, name='quejasPropias'),
     url(r'^categoria/(?P<categoria_id>\d+)/$', views.listaQuejasPorCategoria, name='quejasCategoria')

@@ -1,0 +1,31 @@
+{% load staticfiles %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'app/content/valoraciones.css' %}">
+{% endblock %}
+
+<div class="container-fluid">
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h4>&#191;Qu&#233; te parece esta queja? <small>Tu valoraci&#243;n puede ser de ayuda para otros usuarios.</small></h4>
+      </div>
+      <div class="panel-body">
+            <div class="row lead evaluation">
+                <div id="colorstar" class="starrr ratable"></div>
+                Puntos: <span id="count">0</span><span id="meaning"></span>
+                <div class='indicators' style="display:none; float:right;">
+                    <!-- FORMULARIO -->
+                    <form id="valoracion" action="{% url 'valorarQueja' %}" method="get" class="form" role="form">
+                        <input type="hidden" name="queja" value="{{ queja.id }}">
+                        <input type="hidden" name="puntuacion" id="puntuacion"/>
+
+                        <!-- Botones -->
+                        <div class="col-xs-12 col-md-12 form-group">
+                            <button class="btn btn-success btn-lg btn-circle text-uppercase" type="submit" id="submit"><span class="glyphicon glyphicon-stats"></span>&nbsp; Puntuar queja</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

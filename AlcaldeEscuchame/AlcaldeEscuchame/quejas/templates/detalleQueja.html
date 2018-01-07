@@ -70,8 +70,12 @@
         </div>
     </div>
 
+    <!-- Formulario Valoraci&#243;n si la queja es valorable por el usuario logueado -->
+    {% if valorable %}
+        {% include 'formularioValoracion.html' %}
+    {% endif %}
+
     <!-- Tabla de Comentarios -->
-    {#{% include 'listadoComentarios.html' with comentarios=comentarios titulo='Comentarios' year=year %}#}
     {% include 'listadoComentarios2.html' %}
 
 </div>
@@ -84,5 +88,5 @@
     {% load staticfiles %}
 <script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
 <script src="{% static 'app/scripts/utils.js' %}"></script>
-
+<script src="{% static 'app/scripts/valoraciones.js' %}"></script>
 {% endblock %}

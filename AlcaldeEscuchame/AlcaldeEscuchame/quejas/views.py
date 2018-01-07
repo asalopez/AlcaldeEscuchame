@@ -22,7 +22,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 
-"""Lista las quejas del sistema ordenadas por fecha de publicación"""
+""" Lista las quejas del sistema ordenadas por fecha de publicación """
 @login_required(login_url='/login/')
 def listaQuejas(request):
     assert isinstance(request, HttpRequest)
@@ -48,7 +48,7 @@ def listaQuejas(request):
     return render(request, 'listadoQuejas.html', data)
 
 
-"""Lista las quejas del sistema que pertenecen a la categoria indicada"""
+""" Lista las quejas del sistema que pertenecen a la categoria indicada """
 @login_required(login_url='/login/')
 def listaQuejasPorCategoria(request, categoria_id):
     assert isinstance(request, HttpRequest)
@@ -74,7 +74,7 @@ def listaQuejasPorCategoria(request, categoria_id):
     return render(request, 'listadoQuejas.html', data)
 
 
-"""Lista las quejas del sistema que pertenecen al usuario autenticado"""
+""" Lista las quejas del sistema que pertenecen al usuario autenticado """
 @login_required(login_url='/login/')
 def listaQuejasPropias(request):
     assert isinstance(request, HttpRequest)
@@ -103,7 +103,7 @@ def listaQuejasPropias(request):
     return render(request, 'listadoQuejas.html', data)
 
 
-"""Lista las quejas del sistema cuyo título o descripción encajen con la cadena indicada"""
+""" Lista las quejas del sistema cuyo título o descripción encajen con la cadena indicada """
 @login_required(login_url='/login/')
 def listaQuejasBuscador(request):
     assert isinstance(request, HttpRequest)
@@ -134,7 +134,7 @@ def listaQuejasBuscador(request):
     return render(request, 'listadoQuejas.html', data)
 
 
-"""Vista detallada de la queja indicada a través de su ID"""
+""" Vista detallada de la queja indicada a través de su ID """
 @login_required(login_url='/login/')
 def detalleQueja(request, queja_id):
     assert isinstance(request, HttpRequest)
@@ -152,8 +152,10 @@ def detalleQueja(request, queja_id):
     if (queja):
         comentarios = Comentario.objects.filter(queja = queja).order_by('-fecha')
         valoraciones = Valoracion.objects.filter(queja = queja)
-        # Determina si la queja puede ser tramitada por el funcionario logueado 
+        # Determina si la queja puede ser tramitada por el funcionario logueado (si procede)
         tramitable = esQuejaTramitable(request.user, queja)
+        # Determina si la queja puede ser valorada por el ciudadano logueado (si procede)
+        valorable = esQuejaValorable(request.user, queja)
 
     # Calcula la puntuación media de dichas valoraciones
     rating = 0
@@ -172,6 +174,7 @@ def detalleQueja(request, queja_id):
         'rating': rating,
         'rangoPuntos': range(0,5),
         'tramitable': tramitable,
+        'valorable': valorable,
         'form': form,
         'titulo': 'Detalle de queja',
         'year': datetime.now().year,
@@ -180,7 +183,7 @@ def detalleQueja(request, queja_id):
     return render(request, 'detalleQueja.html', data)
 
 
-"""Creación o Edición de una nueva Queja"""
+""" Creación o Edición de una nueva Queja """
 @login_required(login_url='/login/')
 def formularioQueja(request, queja_id = None):
     assert isinstance(request, HttpRequest)
@@ -261,6 +264,7 @@ def formularioQueja(request, queja_id = None):
     
     return render(request, 'formularioQueja.html', data)
 
+
 """ Elimina la queja indicada por su id """
 @login_required(login_url='/login/')
 def eliminarQueja(request, queja_id):
@@ -284,6 +288,7 @@ def eliminarQueja(request, queja_id):
 
     return HttpResponseRedirect(reverse('quejasPropias'))
 
+
 """ Tramita la queja indicada por su id """
 def tramitarQueja(request, queja_id):
     assert isinstance(request, HttpRequest)
@@ -306,6 +311,32 @@ def tramitarQueja(request, queja_id):
     queja.estado = 'Tramitada'
     queja.save()
 
+    return HttpResponseRedirect(reverse('quejaDetalle', kwargs={'queja_id': queja.id}))
+
+
+""" Crea una nueva valoración para la queja indicada """
+def valorarQueja(request):
+    assert isinstance(request, HttpRequest)
+
+    # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea de tipo Ciudadano
+    if not (request.user.is_authenticated):
+        return HttpResponseRedirect('/login/')
+
+    # Obtienes los parámetros de la URL
+    queja_id = request.GET.get('queja')
+    queja = get_object_or_404(Queja, pk=queja_id)
+    puntos = int(request.GET.get('puntuacion'))
+
+    # La queja solo puede valorarse una vez por cada Ciudadano (siempre que no sea su autor)
+    # La puntuación debe pertenecer al rango [1,5]
+    if not esQuejaValorable(request.user, queja) or not(puntos in range(1,6)):
+        return HttpResponseForbidden()
+
+    ciudadano = request.user.actor.ciudadano
+    
+    # Inserción de la queja en BD
+    valoracion = Valoracion.objects.create(queja = queja, ciudadano = ciudadano, puntuacion = puntos)
+    
     return HttpResponseRedirect(reverse('quejaDetalle', kwargs={'queja_id': queja.id}))
 
 
@@ -392,6 +423,23 @@ def esQuejaTramitable(usuario, queja):
                 res = True
 
     except Funcionario.DoesNotExist:
+        return False;
+
+    return res
+
+""" Dado el usuario autenticado y una queja, determina si es un funcionario y si la queja puede ser tramitada por él """
+def esQuejaValorable(usuario, queja):
+    res = False
+
+    try:
+        # Si el usuario autenticado es un Ciudadano y la queja que intenta valorar no es suya
+        if (usuario.actor.ciudadano != None and queja.ciudadano != usuario.actor.ciudadano):
+            # Comprueba que el ciudadano no haya valorado ya esa queja
+            valoraciones = Valoracion.objects.filter(ciudadano = usuario.actor.ciudadano, queja = queja).count()
+            if (valoraciones == 0):
+                res = True
+
+    except Ciudadano.DoesNotExist:
         return False;
 
     return res

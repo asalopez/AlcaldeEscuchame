@@ -35,7 +35,7 @@ class Queja(models.Model):
         return self.titulo + ' (' + self.referencia + ')';
 
 class Valoracion(models.Model):
-    puntuacion = models.IntegerField(validators = [MaxValueValidator(5), MinValueValidator(0)], help_text = 'Requerido. Rango de 0 a 5 (inclusives).');
+    puntuacion = models.IntegerField(validators = [MaxValueValidator(5), MinValueValidator(1)], help_text = 'Requerido. Rango de 1 a 5 (inclusives).');
 
     # Relaciones
     ciudadano = models.ForeignKey(Ciudadano, on_delete = models.CASCADE, null = True);
