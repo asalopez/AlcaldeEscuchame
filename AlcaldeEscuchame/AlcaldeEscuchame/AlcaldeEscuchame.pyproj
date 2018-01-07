@@ -121,6 +121,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\content\comentarios.css" />
+    <Content Include="app\static\app\scripts\utils.js" />
     <Content Include="app\templates\app\registro.html" />
     <Content Include="categorias\templates\listadoCategorias.html" />
     <Content Include="comentarios\templates\listadoComentarios2.html" />

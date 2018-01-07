@@ -152,6 +152,8 @@ def detalleQueja(request, queja_id):
     if (queja):
         comentarios = Comentario.objects.filter(queja = queja).order_by('-fecha')
         valoraciones = Valoracion.objects.filter(queja = queja)
+        # Determina si la queja puede ser tramitada por el funcionario logueado 
+        tramitable = esQuejaTramitable(request.user, queja)
 
     # Calcula la puntuación media de dichas valoraciones
     rating = 0
@@ -169,6 +171,7 @@ def detalleQueja(request, queja_id):
         'valoraciones': valoraciones,
         'rating': rating,
         'rangoPuntos': range(0,5),
+        'tramitable': tramitable,
         'form': form,
         'titulo': 'Detalle de queja',
         'year': datetime.now().year,
@@ -212,7 +215,6 @@ def formularioQueja(request, queja_id = None):
 
             # Si estamos Editando
             if queja_id and queja:
-
                 # Actualización de la queja en BD
                 queja.titulo = titulo
                 queja.cuerpo = cuerpo
@@ -259,7 +261,52 @@ def formularioQueja(request, queja_id = None):
     
     return render(request, 'formularioQueja.html', data)
 
+""" Elimina la queja indicada por su id """
+@login_required(login_url='/login/')
+def eliminarQueja(request, queja_id):
+    assert isinstance(request, HttpRequest)
+    
+    # Valida que el usuario no sea anónimo (esté registrado y logueado)
+    if not (request.user.is_authenticated):
+        return HttpResponseRedirect('/login/')
 
+    # Valida que el usuario sea de tipo ciudadano:
+    if not (request.user.actor.ciudadano):
+        return HttpResponseRedirect('/')
+
+    queja = get_object_or_404(Queja, pk=queja_id)
+    # La queja solo puede eliminarse por su autor y si está abierta
+    if queja.ciudadano != request.user.actor.ciudadano or queja.estado != 'Abierta':
+        return HttpResponseForbidden()
+
+    # Elimina la queja
+    queja.delete()
+
+    return HttpResponseRedirect(reverse('quejasPropias'))
+
+""" Tramita la queja indicada por su id """
+def tramitarQueja(request, queja_id):
+    assert isinstance(request, HttpRequest)
+    
+    # Valida que el usuario no sea anónimo (esté registrado y logueado)
+    if not (request.user.is_authenticated):
+        return HttpResponseRedirect('/login/')
+
+    # Valida que el usuario sea de tipo Funcionario:
+    if not (request.user.actor.funcionario):
+        return HttpResponseRedirect('/')
+
+    queja = get_object_or_404(Queja, pk=queja_id)
+    # La queja solo puede tramitarse si está abierta y el Funcionario está a cargo de la categoría en la que el sistema
+    # engloba la queja.
+    if not esQuejaTramitable(request.user, queja):
+        return HttpResponseForbidden()
+
+    # Elimina la queja
+    queja.estado = 'Tramitada'
+    queja.save()
+
+    return HttpResponseRedirect(reverse('quejaDetalle', kwargs={'queja_id': queja.id}))
 
 
 ########################################## Métodos privados  ##################################################################
@@ -329,3 +376,22 @@ def categorizacionAutomatica(numCategorias):
     # Si es impar, devuelve un índice aleatorio (para tomar una posición aleatoria en el array de categorías).
     else:
         return random.randint(0, numCategorias-1)
+
+""" Dado el usuario autenticado y una queja, determina si es un funcionario y si la queja puede ser tramitada por él """
+def esQuejaTramitable(usuario, queja):
+    res = False
+
+    try:
+        # Si el usuario autenticado es un funcionario y la queja está 'Abierta'
+        if (usuario.actor.funcionario != None and queja.estado == 'Abierta'):
+            # Categorías en las que trabaja el funcionario
+            categoriasFuncionario = usuario.actor.funcionario.categorias.all()
+
+            # Si la queja está categorizada por el sistema dentro de alguna de las anteriores
+            if (queja.categoriaAutomatica in categoriasFuncionario):
+                res = True
+
+    except Funcionario.DoesNotExist:
+        return False;
+
+    return res
