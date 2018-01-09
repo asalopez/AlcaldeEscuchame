@@ -34,15 +34,23 @@
                             <li><a href="{% url 'quejas' %}">Últimas Quejas</a></li>
                             <!-- Solo para ciudadanos -->
                             {% if user.actor.ciudadano %}
+                            <li class="divider"></li>
                             <li><a href="{% url 'quejasPropias' %}">Mis Quejas</a></li>
+                            <li class="divider"></li>
                             <li><a href="{% url 'nuevaQueja' %}">Publicar Queja</a></li>
+                            <!-- Solo para funcionarios -->
+                            {% elif user.actor.funcionario %}
+                            <li class="divider"></li>
+                            <li><a href="{% url 'quejasTramitables' %}">Quejas Asignadas</a></li>
                             {% endif %}
                         </ul>
                     </li>                    
                     <li><a href="{% url 'categorias' %}">Categorías</a></li>
                     {% endif %}
-                    <li><a href="{% url 'about' %}">About</a></li>
-                    <li><a href="{% url 'contacto' %}">Contacto</a></li>
+                    {% if user.is_staff %}
+                    <li><a href="/admin/corpus/">Corpus</a></li>
+                    <li><a href="/admin/usuarios/funcionario/">Funcionarios</a></li>
+                    {% endif %}
                 </ul>
                 <!-- Buscador de quejas -->
                 {% include 'buscador.html' %}

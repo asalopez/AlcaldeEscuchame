@@ -62,6 +62,7 @@
     <Compile Include="corpus\migrations\__init__.py" />
     <Compile Include="corpus\models.py" />
     <Compile Include="corpus\tests.py" />
+    <Compile Include="corpus\urls.py" />
     <Compile Include="corpus\views.py" />
     <Compile Include="corpus\__init__.py" />
     <Compile Include="manage.py" />
@@ -126,8 +127,7 @@
     <Content Include="app\static\app\scripts\valoraciones.js" />
     <Content Include="app\templates\app\registro.html" />
     <Content Include="categorias\templates\listadoCategorias.html" />
-    <Content Include="comentarios\templates\listadoComentarios2.html" />
-    <Content Include="comentarios\templates\listadoComentarios.html" />
+    <Content Include="comentarios\templates\comentarios.html" />
     <Content Include="corpus\templates\index.html" />
     <Content Include="quejas\templates\buscador.html" />
     <Content Include="quejas\templates\formularioValoracion.html" />
@@ -158,8 +158,6 @@
     <Content Include="app\static\app\scripts\respond.js" />
     <Content Include="app\static\app\scripts\respond.min.js" />
     <Content Include="app\static\app\scripts\_references.js" />
-    <Content Include="app\templates\app\about.html" />
-    <Content Include="app\templates\app\contact.html" />
     <Content Include="app\templates\app\index.html" />
     <Content Include="app\templates\app\layout.html" />
     <Content Include="app\templates\app\login.html" />

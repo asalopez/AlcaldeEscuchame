@@ -14,6 +14,10 @@ function confirmaAccion(accion) {
             mensaje = "Va a tramitar la queja seleccionada. Si desea continuar, pulse aceptar.";
             break;
 
+        case 'agrega-queja-corpus':
+            mensaje = "Va a crear una nueva entrada para el corpus del sistema con los datos de esta queja. Si desea continuar, pulse aceptar."
+            break;
+
         default:
             mensaje = "";
     }        

@@ -1,4 +1,6 @@
 from django.shortcuts import render, get_object_or_404, get_object_or_404
+from itertools import chain
+from corpus.models import EntradaCorpus
 from django.http.response import HttpResponseForbidden
 import random
 import string
@@ -103,6 +105,39 @@ def listaQuejasPropias(request):
     return render(request, 'listadoQuejas.html', data)
 
 
+""" Lista las quejas del sistema que pertenecen a las categorias asignadas al funcionario autenticado """
+@login_required(login_url='/login/')
+def listaQuejasTramitables(request):
+    assert isinstance(request, HttpRequest)
+
+    # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea de tipo Funcionario
+    if not (request.user.is_authenticated):
+        return HttpResponseRedirect('/login/')
+    elif not (request.user.actor.funcionario):
+        return HttpResponseRedirect('/')
+
+    actor = obtieneTipoActor(request.user)
+    usuario = request.user
+
+    # Obtiene las quejas sistema que son tramitables por el funcionario
+    categoriasFuncionario = usuario.actor.funcionario.categorias.all()
+    quejas = []
+    for c in categoriasFuncionario:
+        q = Queja.objects.filter(categoriaAutomatica = c)
+        quejas = list(chain(quejas, q))
+    
+    # Datos del modelo (vista)
+    data = {
+        'actor': actor,
+        'usuario': usuario,
+        'quejas': quejas,
+        'titulo': 'Listado de quejas',
+        'year': datetime.now().year,
+    }
+
+    return render(request, 'listadoQuejas.html', data)
+
+
 """ Lista las quejas del sistema cuyo título o descripción encajen con la cadena indicada """
 @login_required(login_url='/login/')
 def listaQuejasBuscador(request):
@@ -156,6 +191,8 @@ def detalleQueja(request, queja_id):
         tramitable = esQuejaTramitable(request.user, queja)
         # Determina si la queja puede ser valorada por el ciudadano logueado (si procede)
         valorable = esQuejaValorable(request.user, queja)
+        # Determina si la queja es agregable al corpus por parte del administrador logueado (si procede)
+        agregable = esQuejaAgregable(request.user, queja)
 
     # Calcula la puntuación media de dichas valoraciones
     rating = 0
@@ -174,6 +211,7 @@ def detalleQueja(request, queja_id):
         'rating': rating,
         'rangoPuntos': range(0,5),
         'tramitable': tramitable,
+        'agregable': agregable,
         'valorable': valorable,
         'form': form,
         'titulo': 'Detalle de queja',
@@ -290,6 +328,7 @@ def eliminarQueja(request, queja_id):
 
 
 """ Tramita la queja indicada por su id """
+@login_required(login_url='/login/')
 def tramitarQueja(request, queja_id):
     assert isinstance(request, HttpRequest)
     
@@ -315,6 +354,7 @@ def tramitarQueja(request, queja_id):
 
 
 """ Crea una nueva valoración para la queja indicada """
+@login_required(login_url='/login/')
 def valorarQueja(request):
     assert isinstance(request, HttpRequest)
 
@@ -440,6 +480,23 @@ def esQuejaValorable(usuario, queja):
                 res = True
 
     except Ciudadano.DoesNotExist:
+        return False;
+
+    return res
+
+""" Dado el usuario autenticado como Admin y una Queja, determina si existe Entrada al Corpus sobre dicha queja """
+def esQuejaAgregable(usuario, queja):
+    res = False
+
+    try:
+        # Si el usuario autenticado tiene permisos de administrador
+        if (usuario.is_staff and usuario.actor.administrador != None):
+            # Comprueba si hay alguna Entrada al Corpus con esa referencia
+            entradasCorpus = EntradaCorpus.objects.filter(referencia = queja.referencia).count()
+            if (entradasCorpus == 0):
+                res = True
+
+    except Administrador.DoesNotExist:
         return False;
 
     return res

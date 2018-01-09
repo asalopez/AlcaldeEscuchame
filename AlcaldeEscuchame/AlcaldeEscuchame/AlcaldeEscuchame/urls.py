@@ -21,8 +21,6 @@ admin.autodiscover()
 urlpatterns = [
     # Default: bienvenida, contacto, inicio/cierre sesión
     url(r'^$', app.views.home, name='home'),
-    url(r'^contacto$', app.views.contact, name='contacto'),
-    url(r'^about', app.views.about, name='about'),
     url(r'^login/$', django.contrib.auth.views.login,
         {
             'template_name': 'app/login.html',
@@ -53,6 +51,9 @@ urlpatterns = [
 
      # Comentarios
      url(r'^comentarios/', include('comentarios.urls')),
+
+     # Corpus
+     url(r'^corpus/', include('corpus.urls')),
 
      # Perfil de usuario
      url(r'^perfil/', include('usuarios.urls')),

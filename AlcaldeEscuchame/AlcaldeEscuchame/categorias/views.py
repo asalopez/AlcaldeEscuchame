@@ -10,9 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 
+"""Lista las categorias del sistema"""
 @login_required(login_url='/login/')
 def listaCategorias(request):
-    """Lista las categorias del sistema"""
     assert isinstance(request, HttpRequest)
 
      # Valida que el usuario no sea anónimo (esté registrado y logueado)
@@ -20,12 +20,20 @@ def listaCategorias(request):
         return HttpResponseRedirect('/login/')
 
     categorias = Categoria.objects.all()
-    actor = obtieneTipoActor(request.user)
+    usuario = request.user
+    actor = obtieneTipoActor(usuario)
+
+    # Si el usuario es tipo Funcionario, obtiene sus categorias
+    categoriasFuncionario = []
+    if (hasattr(usuario.actor, 'funcionario')):
+        categoriasFuncionario = usuario.actor.funcionario.categorias.all()
     
     # Datos del modelo (vista)
     data = {
         'actor': actor,
+        'usuario': usuario,
         'categorias': categorias,
+        'categoriasFuncionario': categoriasFuncionario,
         'titulo': 'Categorías',
         'year': datetime.now().year,
     }

@@ -33,11 +33,16 @@
                     {% for categoria in categorias %}
                     <tr>
                         <td><img alt="{{ categoria.nombre }}" src="{{ categoria.imagen }}" class="img-thumbnail img-responsive"></td>
-                        <td>{{ categoria.nombre }}</td>
+                        <td>
+                            {{ categoria.nombre }}
+                            {% if categoria in categoriasFuncionario %}
+                                <h4><span class="label label-big label-success">ASIGNADA</span></h4>
+                            {% endif %}
+                        </td>
                         <td>{{ categoria.descripcion }}</td>
-                        <td class="text-center"><a class='btn btn-info btn-md' href="/quejas/categoria/{{categoria.id}}/"><span class="glyphicon glyphicon-eye-open"> </span> Ver Quejas</a></td>
+                        <td class="text-center"><a class='btn btn-info btn-md' href="/quejas/categoria/{{categoria.id}}/"><span class="glyphicon glyphicon-eye-open">&nbsp; </span>Ver Quejas</a></td>
                         {% if actor == 'Administrador' %}
-                        <td class="text-center"><a class='btn btn-warning btn-md' href="/admin/categorias/categoria/{{categoria.id}}/change/"><span class="glyphicon glyphicon-edit">   </span> Editar</a></td>
+                        <td class="text-center"><a class='btn btn-warning btn-md' href="/admin/categorias/categoria/{{categoria.id}}/change/"><span class="glyphicon glyphicon-edit">&nbsp; </span>Editar</a></td>
                         {% endif %}
                     </tr>
                     {% endfor %}

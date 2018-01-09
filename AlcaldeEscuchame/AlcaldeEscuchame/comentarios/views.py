@@ -28,7 +28,7 @@ def listaComentarios(request):
         'year': datetime.now().year,
     }
 
-    return render(request, 'listadoComentarios.html', data)
+    return render(request, 'comentarios.html', data)
 
 
 @login_required(login_url='/login/')

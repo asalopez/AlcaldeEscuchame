@@ -26,32 +26,6 @@ def home(request):
         }
     )
 
-def contact(request):
-    """Página de contacto."""
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/contact.html',
-        {
-            'titulo':'Contacto',
-            'descripcion':'Página de contacto',
-            'year':datetime.now().year,
-        }
-    )
-
-def about(request):
-    """Renders the about page."""
-    assert isinstance(request, HttpRequest)
-    return render(
-        request,
-        'app/about.html',
-        {
-            'titulo':'About',
-            'descripcion':'Your application description page.',
-            'year':datetime.now().year,
-        }
-    )
-
 def registro(request):
     """Registro del ciudadano en el sistema"""
     assert isinstance(request, HttpRequest)

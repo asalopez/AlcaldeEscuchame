@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'^valorar$', views.valorarQueja, name='valorarQueja'),
     url(r'^buscador$', views.listaQuejasBuscador, name='quejasBuscador'),
     url(r'^ciudadano/$', views.listaQuejasPropias, name='quejasPropias'),
+    url(r'^funcionario/$', views.listaQuejasTramitables, name='quejasTramitables'),
     url(r'^categoria/(?P<categoria_id>\d+)/$', views.listaQuejasPorCategoria, name='quejasCategoria')
 ]
 

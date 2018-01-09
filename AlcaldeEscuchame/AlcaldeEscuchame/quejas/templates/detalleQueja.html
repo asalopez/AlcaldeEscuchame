@@ -56,6 +56,9 @@
                             <i class="glyphicon glyphicon-info-sign"></i>&nbsp; Seg&#250;n la categorizaci&#243;n autom&#225;tica del sistema, esta queja deber&#237;a pertenecer a: <a href="/quejas/categoria/{{ queja.categoriaAutomatica.id }}/">{{ queja.categoriaAutomatica.nombre }}</a>
                         </span>
                         <span style="float:right"><a href="/admin/quejas/queja/{{queja.id}}/delete/" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp; Eliminar Queja</a></span>
+                        {% if agregable %}
+                        <span style="float:right; margin-right:3px;"><a href="{% url 'agregarQuejaCorpus' queja.id %}" class="btn btn-primary" onclick="return confirmaAccion('agrega-queja-corpus')"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp; Agregar al Corpus</a></span>
+                        {% endif %}
                     {% elif actor.actor.funcionario %}
                         <span class="text-left">
                             <i class="glyphicon glyphicon-info-sign"></i>&nbsp; Seg&#250;n la categorizaci&#243;n autom&#225;tica del sistema, esta queja deber&#237;a pertenecer a: <a href="/quejas/categoria/{{ queja.categoriaAutomatica.id }}/">{{ queja.categoriaAutomatica.nombre }}</a>
@@ -76,7 +79,7 @@
     {% endif %}
 
     <!-- Tabla de Comentarios -->
-    {% include 'listadoComentarios2.html' %}
+    {% include 'comentarios.html' %}
 
 </div>
 
