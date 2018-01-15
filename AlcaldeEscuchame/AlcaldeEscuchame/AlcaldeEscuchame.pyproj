@@ -123,6 +123,8 @@
   <ItemGroup>
     <Content Include="app\static\app\content\comentarios.css" />
     <Content Include="app\static\app\content\valoraciones.css" />
+    <Content Include="app\static\app\scripts\jquery.tablesorter.js" />
+    <Content Include="app\static\app\scripts\jquery.tablesorter.min.js" />
     <Content Include="app\static\app\scripts\utils.js" />
     <Content Include="app\static\app\scripts\valoraciones.js" />
     <Content Include="app\templates\app\registro.html" />

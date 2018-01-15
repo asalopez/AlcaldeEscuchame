@@ -12,18 +12,18 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 
-""" Crea una nueva entrada para el Corpus a partir de la Queja indicada por su Id """
 @login_required(login_url='/login/')
 def agregarQuejaCorpus(request, queja_id):
+    """ Crea una nueva entrada para el Corpus a partir de la Queja indicada por su Id """
     assert isinstance(request, HttpRequest)
     
     # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea staff (administrador)
-    if not (request.user.is_authenticated) or not (request.user.is_staff):
+    if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
 
-    # Valida que el usuario sea de tipo Administrador:
-    if not (request.user.actor.administrador):
-        return HttpResponseRedirect('/')
+    # Valida que el usuario sea de tipo Administrador y staff:
+    if not (hasattr(request.user.actor, 'administrador') and (request.user.is_staff)):
+        return HttpResponseForbidden()
 
     queja = get_object_or_404(Queja, pk=queja_id)
     # Crea los campos para la entrada
@@ -43,8 +43,8 @@ def agregarQuejaCorpus(request, queja_id):
 
 ########################################## Métodos privados  ##################################################################
 
-""" Dado el usuario autenticado como Admin y una Queja, determina si existe Entrada al Corpus sobre dicha queja """
 def esQuejaAgregable(usuario, queja):
+    """ Dado el usuario autenticado como Admin y una Queja, determina si existe Entrada al Corpus sobre dicha queja """
     res = False
 
     try:

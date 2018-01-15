@@ -1,4 +1,7 @@
 from django.shortcuts import render
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
+from django.core.paginator import Paginator
 from _datetime import datetime
 from usuarios.models import Funcionario
 from usuarios.models import Ciudadano
@@ -10,16 +13,16 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 
-"""Lista las categorias del sistema"""
 @login_required(login_url='/login/')
 def listaCategorias(request):
+    """Lista las categorias del sistema"""
     assert isinstance(request, HttpRequest)
 
      # Valida que el usuario no sea anónimo (esté registrado y logueado)
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
 
-    categorias = Categoria.objects.all()
+    categorias_query = Categoria.objects.all()
     usuario = request.user
     actor = obtieneTipoActor(usuario)
 
@@ -27,6 +30,18 @@ def listaCategorias(request):
     categoriasFuncionario = []
     if (hasattr(usuario.actor, 'funcionario')):
         categoriasFuncionario = usuario.actor.funcionario.categorias.all()
+    
+    # Paginación
+    paginator = Paginator(categorias_query, 5)
+    page = request.GET.get('page')
+    try:
+        categorias = paginator.page(page)
+    except PageNotAnInteger:
+        # Si page no es un entero, devuelve la primera página
+        categorias = paginator.page(1)
+    except EmptyPage:
+        # Si page está fuera de rango, devuelve la última página
+        categorias = paginator.page(paginator.num_pages)
     
     # Datos del modelo (vista)
     data = {
@@ -41,7 +56,8 @@ def listaCategorias(request):
     return render(request, 'listadoCategorias.html', data)
 
 
-###### Métodos privados  #####
+########################################## Métodos privados  ##################################################################
+
 
 def obtieneTipoActor(user):
     """ Dado un usuario del modelo Django obtiene el actor tipo de asociado """

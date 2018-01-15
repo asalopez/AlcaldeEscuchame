@@ -7,6 +7,7 @@ from django import forms
 from django.core.validators import RegexValidator
 
 class EditarPerfilForm(forms.Form):
+    """ Formulario de edición """
     # Campos editables del User model
     #password = forms.CharField(min_length = 5, max_length = 32, widget = forms.PasswordInput)
     #confirm_password = forms.CharField(min_length = 5, max_length = 32, widget = forms.PasswordInput)
@@ -18,7 +19,7 @@ class EditarPerfilForm(forms.Form):
     poblacion = forms.CharField(max_length = 30, label = 'Población')
     telefono = forms.CharField(max_length = 9, label = 'Teléfono', required = False, validators = [RegexValidator(regex = r'^(6|9)(\d{8})$')])
     direccion = forms.CharField(max_length = 50, label = 'Dirección', required = False)
-    foto = forms.URLField(required = False, validators = [RegexValidator(regex = r'((.png)|(.jpg)|(.jpge))$')])
+    foto = forms.URLField(required = False, label = 'Foto de perfil', validators = [RegexValidator(regex = r'((.png)|(.jpg)|(.jpge))$')])
 
     # Validaciones propias
     #def clean(self):

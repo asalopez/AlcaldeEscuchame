@@ -1,4 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.urls.base import reverse
 from quejas.models import Queja
 from usuarios.models import Actor
 from comentarios.forms import NuevoComentarioForm
@@ -54,7 +55,7 @@ def nuevoComentario(request):
             queja_id = form.cleaned_data["queja"]
 
             # Valida que la queja indicada es comentable (sigue Abierta)
-            queja = Queja.objects.filter(id = queja_id)[0]
+            queja = get_object_or_404(Queja, pk = queja_id)
             if not queja or queja.estado != 'Abierta':
                 return HttpResponseRedirect('/')
 
@@ -62,11 +63,20 @@ def nuevoComentario(request):
             comentario = Comentario.objects.create(fecha = fecha, titulo = titulo, cuerpo = cuerpo, queja_id = queja_id,
                     autor = autor)
 
-            return HttpResponseRedirect('/quejas/' + str(queja_id) + '/')
-        
-    return HttpResponseRedirect('/quejas/' + str(queja_id) + '/')
+            return HttpResponseRedirect(reverse('quejaDetalle', kwargs={'queja_id': queja_id}))
 
-###### Métodos privados  #####
+        # Si el Form no es válido
+        else:
+            queja_id = form.cleaned_data["queja"]
+            # Crea una variable de sesión con los errores
+            request.session['errores_form'] = form.errors
+            # Lleva a la vista de detalle
+            return HttpResponseRedirect(reverse('quejaDetalle', kwargs={'queja_id': queja_id}))
+        
+    return HttpResponseRedirect(reverse('quejaDetalle', kwargs={'queja_id': queja_id}))
+
+
+########################################## Métodos privados  ##################################################################
 
 def getActor(user):
     """ Dado un usuario del modelo Django obtiene el actor asociado """
