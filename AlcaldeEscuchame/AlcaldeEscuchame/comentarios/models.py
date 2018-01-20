@@ -2,7 +2,7 @@ from django.db import models
 from usuarios.models import Actor
 from quejas.models import Queja
 
-# Create your models here.
+# Comentario: fecha, titulo, cuerpo, queja, autor
 class Comentario(models.Model):
     fecha = models.DateTimeField(verbose_name = "Fecha de creación", auto_now = True);
     titulo = models.CharField(max_length = 80, help_text = 'Requerido. 80 carácteres como máximo.');

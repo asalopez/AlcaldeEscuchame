@@ -3,7 +3,7 @@ from django.core.validators import RegexValidator
 from django.core import validators
 from categorias.models import Categoria
 
-# Create your models here.
+# Actor: poblacion, teléfono, dirección, foto, usuario.
 class Actor(models.Model):
     poblacion = models.CharField(max_length = 30, help_text = 'Requerido. 30 carácteres como máximo.')
     telefono = models.CharField(max_length = 9, null = True, blank = True, help_text = 'Opcional. 9 dígitos como máximo. Debe comenzar por 6 ó 9.',
@@ -20,12 +20,15 @@ class Actor(models.Model):
     class Meta:
         verbose_name_plural = "Actores"
 
+
+# Ciudadano
 class Ciudadano(Actor):
     
     def __str__(self):
         return self.usuario.get_full_name() + ' (' + self.usuario.get_username() + ')'
 
 
+# Funcionario
 class Funcionario(Actor):
     # Relaciones
     categorias = models.ManyToManyField(Categoria)
@@ -33,6 +36,8 @@ class Funcionario(Actor):
     def __str__(self):
         return self.usuario.get_full_name() + ' (' + self.usuario.get_username() + ')'
 
+
+# Administrador
 class Administrador(Actor):
 
     def __str__(self):

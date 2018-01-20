@@ -24,7 +24,7 @@ class RegistroForm(forms.Form):
     # Campos requeridos por el User model
     username = forms.CharField(min_length = 5, max_length = 32, label = 'Nombre de usuario')
     password = forms.CharField(min_length = 5, max_length = 32, widget = forms.PasswordInput, label = 'Contraseña')
-    confirm_password = forms.CharField(min_length = 5, max_length = 32, widget = forms.PasswordInput, label = 'Confirmación de contraseña')
+    confirm_password = forms.CharField(min_length = 5, max_length = 32, widget = forms.PasswordInput, label = 'Confirmar contraseña')
     email = forms.EmailField()
     first_name = forms.CharField(min_length = 2, max_length = 32, label = 'Nombre')
     last_name = forms.CharField(min_length = 2, max_length = 50, label = 'Apellidos')

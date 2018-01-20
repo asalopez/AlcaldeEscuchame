@@ -74,8 +74,8 @@ def listaQuejasPorCategoria(request, categoria_id):
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
 
-    # Obtiene las quejas de la categoría indicada
-    quejas_query = Queja.objects.filter(categoriaManual_id = categoria_id)
+    # Obtiene las quejas de la categoría indicada ordenadas por fecha
+    quejas_query = Queja.objects.filter(categoriaManual_id = categoria_id).order_by('-fecha')
     actor = obtieneTipoActor(request.user)
     usuario = request.user
 
@@ -118,7 +118,7 @@ def listaQuejasPropias(request):
     usuario = request.user
 
     # Obtiene las quejas del actor autenticado (Ciudadano)
-    quejas_query = Queja.objects.filter(ciudadano_id = usuario.actor.ciudadano.id)
+    quejas_query = Queja.objects.filter(ciudadano_id = usuario.actor.ciudadano.id).order_by('-fecha')
 
     # Paginación
     paginator = Paginator(quejas_query, 5)
@@ -165,6 +165,10 @@ def listaQuejasTramitables(request):
         q = Queja.objects.filter(categoriaAutomatica = c)
         quejas_query = list(chain(quejas_query, q))
 
+    # Ordena las quejas por fecha
+    if quejas_query:
+        quejas_query.sort(key = lambda q: q.fecha, reverse = True)
+
     # Paginación
     paginator = Paginator(quejas_query, 5)
     page = request.GET.get('page')
@@ -203,10 +207,10 @@ def listaQuejasBuscador(request):
 
     # Obtiene el parámetro de búsqueda en la petición y si existe, las quejas asociadas
     cadena = request.GET.get('q')
-    quejas_query = Queja.objects.all()
+    quejas_query = Queja.objects.all().order_by('-fecha')
     if (cadena): 
         # Obtiene las quejas que coincidan con la cadena pasada
-        quejas_query = quejas.filter(Q(titulo__icontains=cadena) | Q(cuerpo__icontains=cadena))
+        quejas_query = quejas_query.filter(Q(titulo__icontains=cadena) | Q(cuerpo__icontains=cadena))
     
     # Paginación
     paginator = Paginator(quejas_query, 5)

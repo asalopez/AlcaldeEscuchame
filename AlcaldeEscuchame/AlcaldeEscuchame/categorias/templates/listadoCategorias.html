@@ -9,7 +9,7 @@
         <!-- Nueva Categor&#237;a -->
         {% if actor == 'Administrador' %}
         <div class="col-md-5 toppad pull-right col-md-offset-3 ">
-            <a href="/admin/categorias/categoria/add/" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span>   Nueva Categor&#237;a</a>
+            <a href="/admin/categorias/categoria/add/" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span>&nbsp; Nueva Categor&#237;a</a>
         </div>
         {% endif %}
 
@@ -22,7 +22,13 @@
                 <thead>
                     <tr>
                         <th style="width:20%;"></th>
-                        <th style="width:15%;">Nombre</th>
+                        <th style="width:15%;">Nombre &nbsp;&nbsp;
+                            {% if direction == 'asc' %}
+                            <a style="color:black;" href="?order_by=nombre&direction=desc"><i class="glyphicon glyphicon-sort-by-alphabet-alt"></i></a>
+                            {% else %}
+                            <a style="color:black;" href="?order_by=nombre&direction=asc"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a>
+                            {% endif %}
+                        </th>
                         <th>Descripci&#243;n</th>
                         <th></th>
                         {% if actor == 'Administrador' %}
@@ -33,14 +39,14 @@
                 <tbody>
                     {% for categoria in categorias %}
                     <tr>
-                        <td><img alt="{{ categoria.nombre }}" src="{{ categoria.imagen }}" class="img-thumbnail img-responsive"></td>
+                        <td><img alt="{{ categoria.nombre }}" src="{{ categoria.imagen|default:"https://farm5.staticflickr.com/4698/38866721655_bbe22eda25_h.jpg" }}" class="img-thumbnail img-responsive"></td>
                         <td>
                             {{ categoria.nombre }}
                             {% if categoria in categoriasFuncionario %}
                                 <h4><span class="label label-big label-success">ASIGNADA</span></h4>
                             {% endif %}
                         </td>
-                        <td>{{ categoria.descripcion }}</td>
+                        <td>{{ categoria.descripcion | linebreaks }}</td>
                         <td class="text-center"><a class='btn btn-info btn-md' href="/quejas/categoria/{{categoria.id}}/"><span class="glyphicon glyphicon-eye-open">&nbsp; </span>Ver Quejas</a></td>
                         {% if actor == 'Administrador' %}
                         <td class="text-center"><a class='btn btn-warning btn-md' href="/admin/categorias/categoria/{{categoria.id}}/change/"><span class="glyphicon glyphicon-edit">&nbsp; </span>Editar</a></td>
@@ -54,13 +60,13 @@
                 <nav aria-label="Paginaci&#243;n">
                     <ul class="pager">
                         <!-- Resultados -->
-                        <li class="pull-left"><strong>Se han econtrado {{ categorias.paginator.count }} registros</strong></li>
+                        <li class="pull-left"><strong>Se han encontrado {{ categorias.paginator.count }} registros</strong></li>
                         {% if categorias.has_next %}
-                            <li class="pull-right"><a href="?page={{ categorias.next_page_number }}">Siguiente &#187;</a></li>
+                            <li class="pull-right"><a href="?order_by=nombre&direction={{ direction|default:"" }}&page={{ categorias.next_page_number }}">Siguiente &#187;</a></li>
                         {% endif %}
                         <li class="pull-right"><a disabled>P&#225;gina {{ categorias.number }} de {{ categorias.paginator.num_pages }}</a></li>
                         {% if categorias.has_previous %}
-                            <li class="pull-right"><a href="?page={{ categorias.previous_page_number }}">&#171; Anterior</a></li>
+                            <li class="pull-right"><a href="?order_by=nombre&direction={{ direction|default:"" }}&page={{ categorias.previous_page_number }}">&#171; Anterior</a></li>
                         {% endif %}
                     </ul>
                 </nav>

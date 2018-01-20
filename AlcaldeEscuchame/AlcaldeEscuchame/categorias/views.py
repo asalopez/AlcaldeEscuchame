@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from django.db.models.functions.base import Lower
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import Paginator
@@ -22,7 +23,13 @@ def listaCategorias(request):
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
 
+    # Obtiene la ordenación y estable el tipo para la próxima ordenación (click)
+    orden, direccion = obtieneParametrosOrdenacion(request)
+
+    # Obtiene las categorías ordenadas según la ordenación
     categorias_query = Categoria.objects.all()
+    if (orden is not None):
+        categorias_query = categorias_query.order_by(orden)
     usuario = request.user
     actor = obtieneTipoActor(usuario)
 
@@ -50,6 +57,7 @@ def listaCategorias(request):
         'categorias': categorias,
         'categoriasFuncionario': categoriasFuncionario,
         'titulo': 'Categorías',
+        'direction': direccion,
         'year': datetime.now().year,
     }
 
@@ -58,6 +66,32 @@ def listaCategorias(request):
 
 ########################################## Métodos privados  ##################################################################
 
+def obtieneParametrosOrdenacion(request):
+    """ Dada una petición obtiene los parámetros de ordenación """
+
+    # Atributo por el que se pide ordenar
+    order_by = request.GET.get('order_by')
+    # Tipo de ordenación: ascendente o descendente
+    direction = request.GET.get('direction')    
+    
+    # Si no se han introducido parámetros de ordenación
+    if (order_by is None) or (direction is None):
+        # Valores vacios
+        return None, None
+    
+    else:
+        # Valida los posibles valores para los atributos de ordenación
+        if (order_by.lower() != 'nombre') or (direction.lower() != 'asc' and direction.lower() != 'desc') :
+            return None, None
+
+        if (order_by.lower() == 'nombre') and (direction.lower() == 'asc'):
+            # Devuelve el orden y la dirección (asc = Z -> A)
+            return '-nombre', 'asc'
+        elif (order_by.lower() == 'nombre') and (direction.lower() == 'desc'):
+            # Devuelve el orden y la dirección (desc = A -> Z)
+            return 'nombre', 'desc'
+    
+    return None, None
 
 def obtieneTipoActor(user):
     """ Dado un usuario del modelo Django obtiene el actor tipo de asociado """
