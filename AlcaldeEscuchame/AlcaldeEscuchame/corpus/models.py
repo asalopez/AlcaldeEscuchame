@@ -2,6 +2,8 @@ from django.db import models
 from django.core.validators import RegexValidator
 import corpus
 from categorias.models import Categoria
+from django.contrib import admin
+from django.contrib.admin.options import ModelAdmin
 
 # Corpus: nombre
 class Corpus(models.Model):    
@@ -12,6 +14,7 @@ class Corpus(models.Model):
 
     class Meta:
         verbose_name_plural = "Corpus"
+
 
 # EntradaCorpus: referencia, texto, corpus, categoría.
 class EntradaCorpus(models.Model):
@@ -28,6 +31,12 @@ class EntradaCorpus(models.Model):
     class Meta:
         verbose_name_plural = "Entradas corpus"
 
+
+# Clase que define los campos a mostrar en el Panel de Administración para el listado de entradas
+class EntradaCorpusAdmin(admin.ModelAdmin):
+    list_display = ('corpus', 'referencia', 'categoria')
+
+
 # Modelo: fecha actualización, matriz de ponderación, corpus.
 class Modelo(models.Model):
     actualizacion = models.DateTimeField(verbose_name = "Última actualización", auto_now = True)
@@ -38,3 +47,8 @@ class Modelo(models.Model):
 
     def __str__(self):
         return 'Modelo ' + self.corpus.nombre
+
+    
+# Clase que define los campos a mostrar en el Panel de Administración para el listado de modelos
+class ModeloAdmin(admin.ModelAdmin):
+    list_display = ('corpus', 'actualizacion')

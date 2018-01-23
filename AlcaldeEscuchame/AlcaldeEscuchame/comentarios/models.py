@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib import admin
+from django.contrib.admin.options import ModelAdmin
 from usuarios.models import Actor
 from quejas.models import Queja
 
@@ -14,3 +16,8 @@ class Comentario(models.Model):
 
     def __str__(self):
         return self.titulo + ' (' + str(self.fecha) + ')';
+
+
+# Clase que define los campos a mostrar en el Panel de Administración para el listado de comentarios
+class ComentarioAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'queja', 'autor', 'fecha')

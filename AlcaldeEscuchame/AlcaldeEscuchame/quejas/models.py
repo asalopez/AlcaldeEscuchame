@@ -1,4 +1,6 @@
 from django.db import models
+from django.contrib import admin
+from django.contrib.admin.options import ModelAdmin
 from django.core import validators
 from django.core.validators import RegexValidator
 from usuarios.models import Ciudadano
@@ -35,6 +37,11 @@ class Queja(models.Model):
         return self.titulo + ' (' + self.referencia + ')'
 
 
+# Clase que define los campos a mostrar en el Panel de Administración para el listado de quejas
+class QuejaAdmin(admin.ModelAdmin):
+    list_display = ('titulo', 'categoriaManual', 'ciudadano', 'categoriaAutomatica', 'estado', 'fecha')
+
+
 # Valoración: puntos, ciudadano, queja.
 class Valoracion(models.Model):
     puntuacion = models.IntegerField(validators = [MaxValueValidator(5), MinValueValidator(1)], help_text = 'Requerido. Rango de 1 a 5 (inclusives).')
@@ -50,3 +57,7 @@ class Valoracion(models.Model):
         verbose_name_plural = "Valoraciones"
         unique_together = ('ciudadano', 'queja')
 
+
+# Clase que define los campos a mostrar en el Panel de Administración para el listado de valoraciones
+class ValoracionAdmin(admin.ModelAdmin):
+    list_display = ('puntuacion', 'ciudadano', 'queja')

@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app\static\app\content\comentarios.css" />
+    <Content Include="app\static\app\content\index.css" />
     <Content Include="app\static\app\content\valoraciones.css" />
     <Content Include="app\static\app\scripts\utils.js" />
     <Content Include="app\static\app\scripts\valoraciones.js" />
