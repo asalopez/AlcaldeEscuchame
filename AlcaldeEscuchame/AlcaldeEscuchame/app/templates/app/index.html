@@ -1,39 +1,50 @@
 {% extends "app/layout.html" %}
 
+{% load staticfiles %}
+
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'app/content/index.css' %}">
+{% endblock %}
+
 <!-- CONTENIDO -->
 {% block content %}
 
 <div class="jumbotron">
-    <h1>&#161;Alcalde, Esc&#250;chame!</h1>
-    <p class="lead">&#161;Alcalde, Esc&#250;chame! es una plataforma web totalmente independiente y gratuita para la denuncia ciudadana cuyo objetivo es acelerar los 
-    procesos necesarios para la resoluci&#243;n de las quejas que los usuarios puedan tener asegurando que estas llegan a los terceros involucrados en el menor tiempo posible.
-    </p>
-    <p><a href="https://www.djangoproject.com/" class="btn btn-primary btn-large">Learn more &raquo;</a></p>
+    <h1 class="jumbotron-title">&#161;Alcalde, Esc&#250;chame!</h1>
+    <div class="jumbotron-div">
+        <p class="jumbotron-p">&#161;Alcalde, Esc&#250;chame! es una plataforma web totalmente independiente y gratuita para la denuncia ciudadana cuyo objetivo es dar a conocer los
+        principales problemas que sufren los ciudadanos en su d&#237;a a d&#237;a. Mediante este portal, la repercusi&#243;n de estas quejas aumenta exponencialmente, consiguiendo en muchos casos
+        acelerar los procesos necesarios para su resoluci&#243;n.
+        </p>
+    </div>
+    <span><a href="{% url 'quejas' %}" class="btn btn-success btn-large"><i class="glyphicon glyphicon-bullhorn"></i>&nbsp;&nbsp;&nbsp;Ver &#250;ltimas quejas &raquo;</a></span>
 </div>
 
 <div class="row">
     <div class="col-md-4">
-        <h2>Seguridad</h2>
-        <p>
-            Cualquier persona puede revelar informaci&#243;n de inter&#233;s de forma segura y bajo la garant&#237;a de que esta
-            llega a todos los involucrados: tanto ciudadanos como funcionarios de la administraci&#243;n p&#250;blica con la capacidad 
-            necesaria resolverlas.
-        </p>
-        <p><a class="btn btn-default" href="http://www.djangobook.com/en/2.0/index.html">Learn more &raquo;</a></p>
+        <h2 style="text-align:center;">Sin Censuras</h2>
+        <p class="col-p">Cualquier persona puede revelar informaci&#243;n de inter&#233;s de forma segura, sin censuras y bajo la garant&#237;a de que esta
+        llega a todos los involucrados: tanto ciudadanos como funcionarios de la administraci&#243;n p&#250;blica con la capacidad 
+        para resolverlas.</p>
+        <img src="https://farm5.staticflickr.com/4716/39769741432_f513e7ca98_h.jpg" class="img-circle img-responsive" />
     </div>
     <div class="col-md-4">
-        <h2>Rapidez</h2>
-        <p>Los procesos de denuncia p&#250;blica son lentos y costosos para el ciudadano. &#161;Alcalde, Esc&#250;chame! ofrece la
+        <h2 style="text-align:center;">Mayor Repercusi&#243;n</h2>
+        <p class="col-p">La publicaci&#243;n en la red de estas quejas garantizan su m&#225;xima difusi&#243;n ya que quedan al alcance de los distintos
+        medios de comunicaci&#243;n y organizaciones civiles con capacidad para ampliar el impacto de las mismas a nivel medi&#225;tico.</p>
+        <img src="https://farm5.staticflickr.com/4701/39087660454_657344e47f_h.jpg" class="img-circle img-responsive" />
+    </div>
+    <div class="col-md-4">
+        <h2 style="text-align:center;">R&#225;pida Tramitaci&#243;n</h2>
+        <p class="col-p">Los procesos de denuncia p&#250;blica son lentos y costosos para el ciudadano. &#161;Alcalde, Esc&#250;chame! ofrece la
         posibilidad de agilizar estos procesos mediante la interacci&#243;n colaborativa de sus usuarios entre los que se incluyen 
         funcionarios de la administraci&#243;n p&#250;blica.</p>
-        <p><a class="btn btn-default" href="https://pypi.org/">Learn more &raquo;</a></p>
+        <img src="https://farm5.staticflickr.com/4705/24930747407_cbd1959cfb_h.jpg" class="img-circle img-responsive" />
     </div>
-    <div class="col-md-4">
-        <h2>Repercusi&#243;n</h2>
-        <p>La publicaci&#243;n en la red de estas quejas garantizan su m&#225;xima difusi&#243;n ya que quedan al alcance de los distintos
-        medios de comunicaci&#243;n y organizaciones civiles con capacidad para ampliar el impacto de las mismas a nivel medi&#225;tico.</p>
-        <p><a class="btn btn-default" href="http://azure.microsoft.com">Learn more &raquo;</a></p>
-    </div>
+</div>
+
+<div class="row">
+    <img src="https://farm5.staticflickr.com/4702/28019267339_d35684b61c_o.png" class="img-responsive"/>
 </div>
 
 {% endblock %}

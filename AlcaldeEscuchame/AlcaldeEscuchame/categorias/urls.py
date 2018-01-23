@@ -10,8 +10,6 @@ import django.contrib.auth.views
 
 urlpatterns = [
     url(r'^$', views.listaCategorias, name='categorias'),
-    #url(r'^edit/$', views.editarCategoria, name='editarCategoria'),
-
 ]
 
     

@@ -1,6 +1,8 @@
 #encoding:utf-8
 
 from django.contrib.auth.decorators import login_required
+from django.http.response import HttpResponseForbidden
+from usuarios.forms import EditarClavesForm
 from usuarios.forms import EditarPerfilForm
 from _datetime import date
 from usuarios.models import Ciudadano, Funcionario, Administrador
@@ -50,14 +52,11 @@ def editarPerfil(request):
         form = EditarPerfilForm(request.POST)
         if (form.is_valid()):
             # Actualiza el User (model Django) en BD
-            #password = form.cleaned_data["password"]
-            #confirm_password = form.cleaned_data["confirm_password"]
             email = form.cleaned_data["email"]
             first_name = form.cleaned_data["first_name"]
             last_name = form.cleaned_data["last_name"]            
 
             user = request.user
-            #user.password = password
             user.email = email
             user.first_name = first_name
             user.last_name = last_name
@@ -101,7 +100,48 @@ def editarPerfil(request):
     return render(request, 'edicionPerfil.html', data)
 
 
-###### Métodos privados  #####
+@login_required(login_url='/login/')
+def editarClaves(request):
+    """Edición de la clave del usuario autenticado"""
+    assert isinstance(request, HttpRequest)
+    
+    # Valida que el usuario no sea anónimo (esté registrado y logueado)
+    if not (request.user.is_authenticated):
+        return HttpResponseRedirect('/login/')
+
+    # Si se ha enviado el Form
+    if (request.method == 'POST'):
+        form = EditarClavesForm(request.POST)
+        if (form.is_valid()):
+            # Se asegura que la Id que viene del formulario es la misma que la del usuario que realiza la acción
+            idUsuario = form.cleaned_data["idUsuario"]
+            user = request.user
+            if (idUsuario != user.id):
+                    return HttpResponseForbidden()
+
+            # Establece la nueva contraseña del usuario
+            password = form.cleaned_data["password"]
+            user.set_password(password)
+            user.save()
+
+            return HttpResponseRedirect('/')
+
+    # Si se accede al form vía GET o cualquier otro método
+    else:
+        form = EditarClavesForm()
+    
+    # Datos del modelo (vista)
+    data = {
+        'form': form,
+        'user': request.user,
+        'titulo': 'Cambiar contraseña',
+        'year': datetime.now().year,
+    }
+        
+    return render(request, 'edicionClaves.html', data)
+
+
+#################################### Métodos privados  ###############################################
 
 def getActor(user):
     """ Dado un usuario del modelo Django obtiene el actor asociado """

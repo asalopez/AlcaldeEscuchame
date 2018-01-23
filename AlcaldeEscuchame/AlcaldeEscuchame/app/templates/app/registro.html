@@ -6,100 +6,94 @@
 <h2>{{ titulo }}</h2>
 
 <div class="row">
-    <div class="col-md-8">
+    
+    <div class="container-fluid">
+        <br/>
+        <div class="col-md-12">
 
-        <section id="registroForm">
-            <form action="{% url 'registro' %}" method="post" class="form-horizontal">
+            <!-- Formulario Registro -->
+            <form id="registro" method="post" action="{% url 'registro' %}" class="form" role="form">
                 {% csrf_token %}
-                {#<h4>Use sus credenciales para iniciar sesi&#243;n.</h4>#}
-                <hr />
-
-                <!-- Usuario -->
-                <div class="form-group">
-                    <label for="id_username" class="col-md-2 control-label">Nombre de usuario</label>
-                    <div class="col-md-10">
-                        {{ form.username }}
+                <div class="row">
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="username" class="control-label">Nombre de usuario</label>
+                        <input class="form-control" id="username" name="username" placeholder="Nombre de usuario" type="text" value="{{ form.username.value|default:"" }}" required autofocus/>
+                    </div>
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="email" class="control-label">Email</label>
+                        <input class="form-control" id="email" name="email" placeholder="Direcci&#243;n de correo electr&#243;nico" type="email" value="{{ form.email.value|default:"" }}" required/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="id_password" class="col-md-2 control-label">Contrase&#241;a</label>
-                    <div class="col-md-10">
-                        {{ form.password }}
+                <div class="row">
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="password" class="control-label">Contrase&#241;a</label>
+                        <input class="form-control" name="password" id="password" type="password" placeholder="Contrase&#241;a" required/>
+                    </div>
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="confirm_password" class="control-label">Confirmar contrase&#241;a</label>
+                        <input class="form-control" name="confirm_password" id="confirm_password" type="password" placeholder="Confirmar contrase&#241;a" required/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="id_password" class="col-md-2 control-label">Confirmar Contrase&#241;a</label>
-                    <div class="col-md-10">
-                        {{ form.confirm_password }}
+                <hr/>
+                <div class="row">
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="first_name" class="control-label">Nombre</label>
+                        <input class="form-control" name="first_name" id="first_name" type="text" placeholder="Nombre" value="{{ form.first_name.value|default:"" }}" required/>
+                    </div>
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="last_name" class="control-label">Apellidos</label>
+                        <input class="form-control" name="last_name" id="last_name" type="text" placeholder="Apellidos" value="{{ form.last_name.value|default:"" }}" required/>
                     </div>
                 </div>
-
-                <hr />
-
-                <div class="form-group">
-                    <label for="id_firstName" class="col-md-2 control-label">Nombre</label>
-                    <div class="col-md-10">
-                        {{ form.first_name }}
+                <div class="row">
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="poblacion" class="control-label">Poblaci&#243;n</label>
+                        <input class="form-control" name="poblacion" id="poblacion" type="text" placeholder="Poblaci&#243;n" value="{{ form.poblacion.value|default:"" }}" required/>
+                    </div>
+                    <div class="col-xs-6 col-md-6 form-group">
+                        <label for="telefono" class="control-label">Tel&#233;fono</label>
+                        <input class="form-control" name="telefono" id="telefono" type="text" placeholder="Tel&#233;fono" value="{{ form.telefono.value|default:"" }}"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="id_lastName" class="col-md-2 control-label">Apellidos</label>
-                    <div class="col-md-10">
-                        {{ form.last_name }}
+                <div class="row">
+                    <div class="col-xs-12 col-md-12 form-group">
+                        <label for="direccion" class="control-label">Direcci&#243;n</label>
+                        <input class="form-control" name="direccion" id="direccion" type="text" placeholder="Direcci&#243;n" value="{{ form.direccion.value|default:"" }}"/>
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="id_email" class="col-md-2 control-label">Email</label>
-                    <div class="col-md-10">
-                        {{ form.email }}
+                <div class="row">
+                    <div class="col-xs-12 col-md-12 form-group">
+                        <label for="foto" class="control-label">Foto de perfil</label>
+                        <input class="form-control" name="foto" id="foto" type="url" placeholder="Foto de perfil del usuario" value="{{ form.foto.value|default:"" }}"/>
                     </div>
                 </div>
-                <!-- Fin Usuario -->
-
-                <!-- Ciudadano-->
-                <div class="form-group">
-                    <label for="id_poblacion" class="col-md-2 control-label">Poblaci&#243;n</label>
-                    <div class="col-md-10">
-                        {{ form.poblacion }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="id_telefono" class="col-md-2 control-label">Tel&#233;fono</label>
-                    <div class="col-md-10">
-                        {{ form.telefono }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="id_direccion" class="col-md-2 control-label">Direcci&#243;n</label>
-                    <div class="col-md-10">
-                        {{ form.direccion }}
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="id_foto" class="col-md-2 control-label">Foto de perfil</label>
-                    <div class="col-md-10">
-                        {{ form.foto }}
-                    </div>
-                </div>
-                <!-- Fin Ciudadano -->
-
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="hidden" name="next" value="/" />
-                        <input type="submit" value="Registrarse" class="btn btn-default" />
-                        <input type="button" class="btn btn-default" onclick="location.href='/';" value="Cancelar" />
-                    </div>
-                </div>
-
-                {% if form.non_field_errors %}
-                    <p class="validation-summary-errors">{{ form.non_field_errors }}</p>
-                {% else %}
-                    <p class="validation-summary-errors">{{ form.errors }}</p>
+                
+                <!-- Tratamiento de Errores -->
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ field.label }}: {{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
                 {% endif %}
-
+                <!-- Botones -->
+                <div class="row">
+                    <div class="col-xs-12 col-md-12 form-group">
+                        <input type="hidden" name="next" value="/" />
+                        <input type="submit" value="Registrarse" class="btn btn-primary btn-block" />
+                        <input type="button" class="btn btn-default btn-block" onclick="location.href='/';" value="Cancelar" />
+                    </div>
+                </div>
             </form>
-        </section>
 
+        </div>
     </div>
 
     <div class="col-md-4">

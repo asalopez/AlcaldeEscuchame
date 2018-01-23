@@ -11,7 +11,7 @@ import django.contrib.auth.views
 urlpatterns = [
     url(r'^$', views.perfil, name='perfil'),
     url(r'^editar/$', views.editarPerfil, name='editarPerfil'),
-
+    url(r'^editarClaves/$', views.editarClaves, name='cambioClaves'),
 ]
 
     

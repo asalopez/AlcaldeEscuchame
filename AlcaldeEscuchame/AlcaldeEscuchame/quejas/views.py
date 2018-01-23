@@ -1,4 +1,7 @@
 from django.shortcuts import render, get_object_or_404, get_object_or_404
+from django.core.paginator import EmptyPage
+from django.core.paginator import PageNotAnInteger
+from django.core.paginator import Paginator
 from itertools import chain
 from corpus.models import EntradaCorpus
 from django.http.response import HttpResponseForbidden
@@ -24,9 +27,9 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 
 
-""" Lista las quejas del sistema ordenadas por fecha de publicación """
 @login_required(login_url='/login/')
 def listaQuejas(request):
+    """ Lista las quejas del sistema ordenadas por fecha de publicación """
     assert isinstance(request, HttpRequest)
 
      # Valida que el usuario no sea anónimo (esté registrado y logueado)
@@ -34,9 +37,21 @@ def listaQuejas(request):
         return HttpResponseRedirect('/login/')
 
     # Obtiene las quejas ordenadas por fecha (de más reciente a menos)
-    quejas = Queja.objects.order_by('-fecha')
+    quejas_query = Queja.objects.order_by('-fecha')
     actor = obtieneTipoActor(request.user)
     usuario = request.user
+
+    # Paginación
+    paginator = Paginator(quejas_query, 5)
+    page = request.GET.get('page')
+    try:
+        quejas = paginator.page(page)
+    except PageNotAnInteger:
+        # Si page no es un entero, devuelve la primera página
+        quejas = paginator.page(1)
+    except EmptyPage:
+        # Si page está fuera de rango, devuelve la última página
+        quejas = paginator.page(paginator.num_pages)
     
     # Datos del modelo (vista)
     data = {
@@ -50,19 +65,31 @@ def listaQuejas(request):
     return render(request, 'listadoQuejas.html', data)
 
 
-""" Lista las quejas del sistema que pertenecen a la categoria indicada """
 @login_required(login_url='/login/')
 def listaQuejasPorCategoria(request, categoria_id):
+    """ Lista las quejas del sistema que pertenecen a la categoria indicada """
     assert isinstance(request, HttpRequest)
 
      # Valida que el usuario no sea anónimo (esté registrado y logueado)
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
 
-    # Obtiene las quejas de la categoría indicada
-    quejas = Queja.objects.filter(categoriaManual_id = categoria_id)
+    # Obtiene las quejas de la categoría indicada ordenadas por fecha
+    quejas_query = Queja.objects.filter(categoriaManual_id = categoria_id).order_by('-fecha')
     actor = obtieneTipoActor(request.user)
     usuario = request.user
+
+    # Paginación
+    paginator = Paginator(quejas_query, 5)
+    page = request.GET.get('page')
+    try:
+        quejas = paginator.page(page)
+    except PageNotAnInteger:
+        # Si page no es un entero, devuelve la primera página
+        quejas = paginator.page(1)
+    except EmptyPage:
+        # Si page está fuera de rango, devuelve la última página
+        quejas = paginator.page(paginator.num_pages)
 
     # Datos del modelo (vista)
     data = {
@@ -76,9 +103,9 @@ def listaQuejasPorCategoria(request, categoria_id):
     return render(request, 'listadoQuejas.html', data)
 
 
-""" Lista las quejas del sistema que pertenecen al usuario autenticado """
 @login_required(login_url='/login/')
 def listaQuejasPropias(request):
+    """ Lista las quejas del sistema que pertenecen al usuario autenticado """
     assert isinstance(request, HttpRequest)
 
     # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea de tipo Ciudadano
@@ -91,7 +118,19 @@ def listaQuejasPropias(request):
     usuario = request.user
 
     # Obtiene las quejas del actor autenticado (Ciudadano)
-    quejas = Queja.objects.filter(ciudadano_id = usuario.actor.ciudadano.id)
+    quejas_query = Queja.objects.filter(ciudadano_id = usuario.actor.ciudadano.id).order_by('-fecha')
+
+    # Paginación
+    paginator = Paginator(quejas_query, 5)
+    page = request.GET.get('page')
+    try:
+        quejas = paginator.page(page)
+    except PageNotAnInteger:
+        # Si page no es un entero, devuelve la primera página
+        quejas = paginator.page(1)
+    except EmptyPage:
+        # Si page está fuera de rango, devuelve la última página
+        quejas = paginator.page(paginator.num_pages)
     
     # Datos del modelo (vista)
     data = {
@@ -105,9 +144,9 @@ def listaQuejasPropias(request):
     return render(request, 'listadoQuejas.html', data)
 
 
-""" Lista las quejas del sistema que pertenecen a las categorias asignadas al funcionario autenticado """
 @login_required(login_url='/login/')
 def listaQuejasTramitables(request):
+    """ Lista las quejas del sistema que pertenecen a las categorias asignadas al funcionario autenticado """
     assert isinstance(request, HttpRequest)
 
     # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea de tipo Funcionario
@@ -121,10 +160,26 @@ def listaQuejasTramitables(request):
 
     # Obtiene las quejas sistema que son tramitables por el funcionario
     categoriasFuncionario = usuario.actor.funcionario.categorias.all()
-    quejas = []
+    quejas_query = []
     for c in categoriasFuncionario:
         q = Queja.objects.filter(categoriaAutomatica = c)
-        quejas = list(chain(quejas, q))
+        quejas_query = list(chain(quejas_query, q))
+
+    # Ordena las quejas por fecha
+    if quejas_query:
+        quejas_query.sort(key = lambda q: q.fecha, reverse = True)
+
+    # Paginación
+    paginator = Paginator(quejas_query, 5)
+    page = request.GET.get('page')
+    try:
+        quejas = paginator.page(page)
+    except PageNotAnInteger:
+        # Si page no es un entero, devuelve la primera página
+        quejas = paginator.page(1)
+    except EmptyPage:
+        # Si page está fuera de rango, devuelve la última página
+        quejas = paginator.page(paginator.num_pages)
     
     # Datos del modelo (vista)
     data = {
@@ -138,9 +193,9 @@ def listaQuejasTramitables(request):
     return render(request, 'listadoQuejas.html', data)
 
 
-""" Lista las quejas del sistema cuyo título o descripción encajen con la cadena indicada """
 @login_required(login_url='/login/')
 def listaQuejasBuscador(request):
+    """ Lista las quejas del sistema cuyo título o descripción encajen con la cadena indicada """
     assert isinstance(request, HttpRequest)
 
     # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea de tipo Ciudadano
@@ -152,11 +207,23 @@ def listaQuejasBuscador(request):
 
     # Obtiene el parámetro de búsqueda en la petición y si existe, las quejas asociadas
     cadena = request.GET.get('q')
-    quejas = Queja.objects.all()
+    quejas_query = Queja.objects.all().order_by('-fecha')
     if (cadena): 
         # Obtiene las quejas que coincidan con la cadena pasada
-        quejas = quejas.filter(Q(titulo__icontains=cadena) | Q(cuerpo__icontains=cadena))
+        quejas_query = quejas_query.filter(Q(titulo__icontains=cadena) | Q(cuerpo__icontains=cadena))
     
+    # Paginación
+    paginator = Paginator(quejas_query, 5)
+    page = request.GET.get('page')
+    try:
+        quejas = paginator.page(page)
+    except PageNotAnInteger:
+        # Si page no es un entero, devuelve la primera página
+        quejas = paginator.page(1)
+    except EmptyPage:
+        # Si page está fuera de rango, devuelve la última página
+        quejas = paginator.page(paginator.num_pages)
+
     # Datos del modelo (vista)
     data = {
         'actor': actor,
@@ -169,9 +236,9 @@ def listaQuejasBuscador(request):
     return render(request, 'listadoQuejas.html', data)
 
 
-""" Vista detallada de la queja indicada a través de su ID """
 @login_required(login_url='/login/')
 def detalleQueja(request, queja_id):
+    """ Vista detallada de la queja indicada a través de su ID """
     assert isinstance(request, HttpRequest)
 
      # Valida que el usuario no sea anónimo (esté registrado y logueado)
@@ -182,10 +249,10 @@ def detalleQueja(request, queja_id):
     queja = Queja.objects.get(id = queja_id)
 
     # Obtiene los comentarios y valoraciones de la queja anterior
-    comentarios = []
+    comentarios_query = []
     valoraciones = []
     if (queja):
-        comentarios = Comentario.objects.filter(queja = queja).order_by('-fecha')
+        comentarios_query = Comentario.objects.filter(queja = queja).order_by('-fecha')
         valoraciones = Valoracion.objects.filter(queja = queja)
         # Determina si la queja puede ser tramitada por el funcionario logueado (si procede)
         tramitable = esQuejaTramitable(request.user, queja)
@@ -194,13 +261,31 @@ def detalleQueja(request, queja_id):
         # Determina si la queja es agregable al corpus por parte del administrador logueado (si procede)
         agregable = esQuejaAgregable(request.user, queja)
 
+    # Paginación Comentarios
+    paginator = Paginator(comentarios_query, 5)
+    page = request.GET.get('page')
+    try:
+        comentarios = paginator.page(page)
+    except PageNotAnInteger:
+        # Si page no es un entero, devuelve la primera página
+        comentarios = paginator.page(1)
+    except EmptyPage:
+        # Si page está fuera de rango, devuelve la última página
+        comentarios = paginator.page(paginator.num_pages)
+
     # Calcula la puntuación media de dichas valoraciones
     rating = 0
     if (valoraciones.count() > 0):
         rating = obtieneRatingQueja(valoraciones)
 
-    # Formulario de nuevo comentario
+    ## Formulario nuevo comentario
     form = NuevoComentarioForm()
+    form_errors = []
+    # Busca errores del formulario en la sesión
+    if (request.session.get('errores_form')):
+        # Obtiene los errores si existiesen y elimina la variable
+        form_errors = request.session.pop('errores_form', [])
+
     
     # Datos del modelo (vista)
     data = {
@@ -214,16 +299,17 @@ def detalleQueja(request, queja_id):
         'agregable': agregable,
         'valorable': valorable,
         'form': form,
+        'form_errors': form_errors,
         'titulo': 'Detalle de queja',
-        'year': datetime.now().year,
+        'year': datetime.now().year
     }
 
     return render(request, 'detalleQueja.html', data)
 
 
-""" Creación o Edición de una nueva Queja """
 @login_required(login_url='/login/')
 def formularioQueja(request, queja_id = None):
+    """ Creación o Edición de una nueva Queja """
     assert isinstance(request, HttpRequest)
     
     # Valida que el usuario no sea anónimo (esté registrado y logueado)
@@ -303,9 +389,9 @@ def formularioQueja(request, queja_id = None):
     return render(request, 'formularioQueja.html', data)
 
 
-""" Elimina la queja indicada por su id """
 @login_required(login_url='/login/')
 def eliminarQueja(request, queja_id):
+    """ Elimina la queja indicada por su id """
     assert isinstance(request, HttpRequest)
     
     # Valida que el usuario no sea anónimo (esté registrado y logueado)
@@ -327,9 +413,9 @@ def eliminarQueja(request, queja_id):
     return HttpResponseRedirect(reverse('quejasPropias'))
 
 
-""" Tramita la queja indicada por su id """
 @login_required(login_url='/login/')
 def tramitarQueja(request, queja_id):
+    """ Tramita la queja indicada por su id """
     assert isinstance(request, HttpRequest)
     
     # Valida que el usuario no sea anónimo (esté registrado y logueado)
@@ -337,8 +423,8 @@ def tramitarQueja(request, queja_id):
         return HttpResponseRedirect('/login/')
 
     # Valida que el usuario sea de tipo Funcionario:
-    if not (request.user.actor.funcionario):
-        return HttpResponseRedirect('/')
+    if not (hasattr(request.user.actor, 'funcionario')):
+        return HttpResponseForbidden()
 
     queja = get_object_or_404(Queja, pk=queja_id)
     # La queja solo puede tramitarse si está abierta y el Funcionario está a cargo de la categoría en la que el sistema
@@ -353,9 +439,9 @@ def tramitarQueja(request, queja_id):
     return HttpResponseRedirect(reverse('quejaDetalle', kwargs={'queja_id': queja.id}))
 
 
-""" Crea una nueva valoración para la queja indicada """
 @login_required(login_url='/login/')
 def valorarQueja(request):
+    """ Crea una nueva valoración para la queja indicada """
     assert isinstance(request, HttpRequest)
 
     # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea de tipo Ciudadano
@@ -382,8 +468,8 @@ def valorarQueja(request):
 
 ########################################## Métodos privados  ##################################################################
 
-""" Dado un usuario del modelo Django obtiene el tipo (nombre de la clase) de actor asociado """
 def obtieneTipoActor(user):
+    """ Dado un usuario del modelo Django obtiene el tipo (nombre de la clase) de actor asociado """
     # Consulta Administradores
     admins = Administrador.objects.filter(usuario = user)
     if (admins.count() > 0):
@@ -401,8 +487,8 @@ def obtieneTipoActor(user):
 
     return None
 
-""" Devuelve un entero (redondeado) con la puntuación media de las valoraciones de la queja """
 def obtieneRatingQueja(valoraciones):
+    """ Devuelve un entero (redondeado) con la puntuación media de las valoraciones de la queja """
     res = 0
     total = 0
 
@@ -414,8 +500,8 @@ def obtieneRatingQueja(valoraciones):
 
     return res
 
-"""Genera una referencia que cumpla con el patrón establecido por los requisitos"""
 def generaReferencia():
+    """Genera una referencia que cumpla con el patrón establecido por los requisitos"""
     res = ''
 
     # Caracteres que pueden formar parte de la cadena
@@ -433,8 +519,8 @@ def generaReferencia():
 
     return res
 
-"""Categoriza la queja de manera aleatoria"""
 def categorizacionAutomatica(numCategorias):
+    """Categoriza la queja de manera aleatoria"""
     # Toma un número aleatorio del 1 al 100
     num = random.randint(1,100)
     # Toma el resto para ver si es par
@@ -448,8 +534,8 @@ def categorizacionAutomatica(numCategorias):
     else:
         return random.randint(0, numCategorias-1)
 
-""" Dado el usuario autenticado y una queja, determina si es un funcionario y si la queja puede ser tramitada por él """
 def esQuejaTramitable(usuario, queja):
+    """ Dado el usuario autenticado y una queja, determina si es un funcionario y si la queja puede ser tramitada por él """
     res = False
 
     try:
@@ -467,8 +553,8 @@ def esQuejaTramitable(usuario, queja):
 
     return res
 
-""" Dado el usuario autenticado y una queja, determina si es un funcionario y si la queja puede ser tramitada por él """
 def esQuejaValorable(usuario, queja):
+    """ Dado el usuario autenticado y una queja, determina si es un ciudadano y si la queja puede ser valorada por él """
     res = False
 
     try:
@@ -484,8 +570,8 @@ def esQuejaValorable(usuario, queja):
 
     return res
 
-""" Dado el usuario autenticado como Admin y una Queja, determina si existe Entrada al Corpus sobre dicha queja """
 def esQuejaAgregable(usuario, queja):
+    """ Dado el usuario autenticado como Admin y una Queja, determina si existe Entrada al Corpus sobre dicha queja """
     res = False
 
     try:

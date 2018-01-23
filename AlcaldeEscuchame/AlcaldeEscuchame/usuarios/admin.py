@@ -1,10 +1,10 @@
 from django.contrib import admin
-from usuarios.models import Actor
-from usuarios.models import Ciudadano, Funcionario, Administrador
+from usuarios.models import Actor, ActorAdmin, FuncionarioAdmin, AdministradorAdmin
+from usuarios.models import Ciudadano, CiudadanoAdmin, Funcionario, Administrador
 
 # Register your models here.
-admin.site.register(Actor);
-admin.site.register(Ciudadano);
-admin.site.register(Funcionario);
-admin.site.register(Administrador);
+admin.site.register(Actor, ActorAdmin);
+admin.site.register(Ciudadano, CiudadanoAdmin);
+admin.site.register(Funcionario, FuncionarioAdmin);
+admin.site.register(Administrador, AdministradorAdmin);
 

@@ -1,7 +1,7 @@
 {% if user.is_authenticated %}
 
-{% csrf_token %}
 <form class="navbar-form navbar-left" action="{% url 'quejasBuscador' %}" method="get">
+    {% csrf_token %}
     <div class="form-group">
         <input type="text" class="form-control" placeholder="Buscar quejas" name="q" maxlength="30">
     </div>

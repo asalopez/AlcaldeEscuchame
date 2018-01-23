@@ -15,12 +15,13 @@
 
         <hr/>
 
-        <!-- TABLA -->
+        <!-- Tabla si hay registros -->
+        {% if quejas %}
         <div class="table-responsive">
             <table class="table table-striped table-hover custab">            
                 <thead>
                     <tr>
-                        <th>Publicaci&#243;n</th>
+                        <th></th>
                         <th style="width:10%;">Categor&#237;a</th>
                         <th class="text-center">Estado</th>
                         <th>Nombre</th>
@@ -36,7 +37,7 @@
                     <tr>
                         <td class="text-center">{{ queja.fecha | date:'d/m/Y (H:i)' }}</td>
                         <td class="text-center">
-                            <img alt="{{ queja.categoriaManual.nombre }}" src="{{ queja.categoriaManual.imagen }}" class="img-rounded img-responsive">
+                            <img alt="{{ queja.categoriaManual.nombre }}" src="{{ queja.categoriaManual.imagen|default:"https://farm5.staticflickr.com/4698/38866721655_bbe22eda25_h.jpg" }}" class="img-rounded img-responsive">
                             <span style="font-size: 75%;">{{ queja.categoriaManual.nombre }}</span>
                         </td>
                         <td class="text-center">
@@ -47,10 +48,10 @@
                             {% endif %}
                         </td>
                         <td>{{ queja.titulo }}</td>
-                        <td width="40%">{{ queja.cuerpo | truncatewords:30 }}</td>
+                        <td width="40%">{{ queja.cuerpo | linebreaks | truncatewords:30 }}</td>
                         {% if actor == 'Administrador' or actor == 'Funcionario' %}
                             <td class="text-center">
-                                <img alt="{{ queja.categoriaAutomatica.nombre }}" src="{{ queja.categoriaAutomatica.imagen }}" class="img-rounded img-responsive">
+                                <img alt="{{ queja.categoriaAutomatica.nombre }}" src="{{ queja.categoriaAutomatica.imagen|default:"https://farm5.staticflickr.com/4698/38866721655_bbe22eda25_h.jpg" }}" class="img-rounded img-responsive">
                                 <span style="font-size: 75%;">{{ queja.categoriaAutomatica.nombre }}</span>
                             </td>
                         {% endif %}
@@ -69,7 +70,30 @@
                     {% endfor %}
                 </tbody>
             </table>
+
+            <!-- Paginaci&#243;n de la tabla -->
+            <div class="row">
+                <nav aria-label="Paginaci&#243;n">
+                    <ul class="pager">
+                        <!-- Resultados -->
+                        <li class="pull-left"><strong>Se han econtrado {{ quejas.paginator.count }} registros</strong></li>
+                        {% if quejas.has_next %}
+                            <li class="pull-right"><a href="?page={{ quejas.next_page_number }}">Siguiente &#187;</a></li>
+                        {% endif %}
+                        <li class="pull-right"><a disabled>P&#225;gina {{ quejas.number }} de {{ quejas.paginator.num_pages }}</a></li>
+                        {% if quejas.has_previous %}
+                            <li class="pull-right"><a href="?page={{ quejas.previous_page_number }}">&#171; Anterior</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
         </div>        
+        <!-- Mensaje si no se han encontrado registros -->
+        {% else %}            
+        <div class="row">
+            <h3>No se han encontrado quejas en el sistema.</h3>
+        </div>
+        {% endif %}
 </div>
 
 {% endblock %}
