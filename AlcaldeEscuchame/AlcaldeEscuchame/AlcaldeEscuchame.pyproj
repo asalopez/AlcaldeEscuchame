@@ -32,9 +32,17 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="app\apps.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="app\decorators.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\forms.py" />
     <Compile Include="app\models.py" />
-    <Compile Include="app\tests.py" />
+    <Compile Include="app\tests\test_views.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="app\views.py" />
     <Compile Include="app\__init__.py" />
     <Compile Include="app\migrations\__init__.py" />
@@ -42,7 +50,12 @@
     <Compile Include="categorias\apps.py" />
     <Compile Include="categorias\migrations\__init__.py" />
     <Compile Include="categorias\models.py" />
-    <Compile Include="categorias\tests.py" />
+    <Compile Include="categorias\tests\test_models.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="categorias\tests\test_views.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="categorias\urls.py">
       <SubType>Code</SubType>
     </Compile>
@@ -53,7 +66,12 @@
     <Compile Include="comentarios\forms.py" />
     <Compile Include="comentarios\migrations\__init__.py" />
     <Compile Include="comentarios\models.py" />
-    <Compile Include="comentarios\tests.py" />
+    <Compile Include="comentarios\tests\test_models.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="comentarios\tests\test_views.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="comentarios\urls.py" />
     <Compile Include="comentarios\views.py" />
     <Compile Include="comentarios\__init__.py" />
@@ -61,7 +79,12 @@
     <Compile Include="corpus\apps.py" />
     <Compile Include="corpus\migrations\__init__.py" />
     <Compile Include="corpus\models.py" />
-    <Compile Include="corpus\tests.py" />
+    <Compile Include="corpus\tests\test_models.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="corpus\tests\test_views.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="corpus\urls.py" />
     <Compile Include="corpus\views.py" />
     <Compile Include="corpus\__init__.py" />
@@ -75,7 +98,12 @@
     <Compile Include="quejas\forms.py" />
     <Compile Include="quejas\migrations\__init__.py" />
     <Compile Include="quejas\models.py" />
-    <Compile Include="quejas\tests.py" />
+    <Compile Include="quejas\tests\test_models.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="quejas\tests\test_views.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="quejas\urls.py" />
     <Compile Include="quejas\views.py" />
     <Compile Include="quejas\__init__.py" />
@@ -86,7 +114,12 @@
     </Compile>
     <Compile Include="usuarios\migrations\__init__.py" />
     <Compile Include="usuarios\models.py" />
-    <Compile Include="usuarios\tests.py" />
+    <Compile Include="usuarios\tests\test_models.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="usuarios\tests\test_views.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="usuarios\urls.py">
       <SubType>Code</SubType>
     </Compile>
@@ -96,6 +129,7 @@
   <ItemGroup>
     <Folder Include="app\" />
     <Folder Include="app\migrations\" />
+    <Folder Include="app\tests\" />
     <Folder Include="app\static\" />
     <Folder Include="app\static\app\" />
     <Folder Include="app\static\app\content\" />
@@ -106,18 +140,23 @@
     <Folder Include="AlcaldeEscuchame\" />
     <Folder Include="categorias\" />
     <Folder Include="categorias\migrations\" />
+    <Folder Include="categorias\tests\" />
     <Folder Include="categorias\templates\" />
     <Folder Include="comentarios\" />
     <Folder Include="comentarios\migrations\" />
+    <Folder Include="comentarios\tests\" />
     <Folder Include="comentarios\templates\" />
     <Folder Include="corpus\" />
     <Folder Include="corpus\migrations\" />
+    <Folder Include="corpus\tests\" />
     <Folder Include="corpus\templates\" />
     <Folder Include="quejas\" />
     <Folder Include="quejas\migrations\" />
+    <Folder Include="quejas\tests\" />
     <Folder Include="quejas\templates\" />
     <Folder Include="usuarios\" />
     <Folder Include="usuarios\migrations\" />
+    <Folder Include="usuarios\tests\" />
     <Folder Include="usuarios\templates\" />
   </ItemGroup>
   <ItemGroup>
@@ -129,7 +168,7 @@
     <Content Include="app\templates\app\registro.html" />
     <Content Include="categorias\templates\listadoCategorias.html" />
     <Content Include="comentarios\templates\comentarios.html" />
-    <Content Include="corpus\templates\index.html" />
+    <Content Include="corpus\templates\detalleModelo.html" />
     <Content Include="quejas\templates\buscador.html" />
     <Content Include="quejas\templates\formularioValoracion.html" />
     <Content Include="quejas\templates\formularioQueja.html" />

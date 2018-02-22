@@ -49,7 +49,13 @@
                     <li><a href="{% url 'categorias' %}">Categorías</a></li>
                     {% endif %}
                     {% if user.is_staff %}
-                    <li><a href="/admin/corpus/">Corpus</a></li>
+                    <li>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Corpus</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="/admin/corpus/entradacorpus/">Entradas Corpus</a></li>
+                            <li><a href="{% url 'verModeloCorpus' %}">Ver Modelo</a></li>
+                        </ul>
+                    </li>
                     <li><a href="/admin/usuarios/funcionario/">Funcionarios</a></li>
                     {% endif %}
                 </ul>

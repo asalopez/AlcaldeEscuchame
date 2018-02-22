@@ -54,8 +54,8 @@ SQLITE_SELECT
 TimestampFromTicks
 register_adapters_and_converters
 SQLITE_DROP_TRIGGER
-paramstyle
 SQLITE_ALTER_TABLE
+paramstyle
 Time
 SQLITE_DROP_VIEW
 SQLITE_CREATE_TEMP_INDEX

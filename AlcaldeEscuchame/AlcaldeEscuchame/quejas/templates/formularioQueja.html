@@ -54,6 +54,12 @@
                 <label for="cuerpo" class="control-label">Contenido</label>
                 <textarea class="form-control" id="cuerpo" name="cuerpo" placeholder="Cu&#233;ntanos tu queja..." rows="8" required>{{ form.cuerpo.value|default:"" }}</textarea>
                 <br />
+                <!-- Advertencia Categorizaci&#243;n Autom&#225;tica -->
+                {% if categorizacion %}
+                    <div class="alert alert-warning">
+                        <strong>La categor&#237;a introducida no se ajusta con la categorizaci&#243;n del sistema. Se recomienda incluir esta queja dentro de {{ categorizacion.nombre|escape }}.</strong>
+                    </div>
+                {% endif %}
                 <!-- Tratamiento de errores -->
                 {% if form.errors %}
                     {% for field in form %}
@@ -73,7 +79,7 @@
                 <div class="row">
                     <div class="col-xs-12 col-md-12 form-group">
                         <span class="pull-right">
-                            <button class="btn btn-primary btn-circle text-uppercase" type="submit" id="submit"><span class="glyphicon glyphicon-send"></span>&nbsp; Publicar queja</button>
+                            <button class="btn btn-primary btn-circle text-uppercase" type="submit" id="submit"><span class="glyphicon glyphicon-send"></span>&nbsp; {{boton_submit}}</button>
                             <a href="{% url 'quejasPropias' %}" class="btn btn-warning">Cancelar</a>
                         </span>
                     </div>

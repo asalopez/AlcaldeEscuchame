@@ -23,8 +23,7 @@ def perfil(request):
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
 
-    user = request.user
-    actor = getActor(user)
+    actor = request.user.actor
     
     # Datos del modelo (vista)
     data = {
@@ -47,6 +46,8 @@ def editarPerfil(request):
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
 
+    actor = request.user.actor
+
     # Si se ha enviado el Form
     if (request.method == 'POST'):
         form = EditarPerfilForm(request.POST)
@@ -68,7 +69,6 @@ def editarPerfil(request):
             direccion = form.cleaned_data["direccion"]
             foto = form.cleaned_data["foto"]
 
-            actor = getActor(user)
             actor.poblacion = poblacion
             actor.telefono = telefono
             actor.direccion = direccion
@@ -77,14 +77,8 @@ def editarPerfil(request):
 
             return HttpResponseRedirect('/perfil/')
 
-        # Si el formulario no es correcto necesitaremos el actor para renderizar actor.usuario.username en la plantilla
-        else:
-            actor = getActor(request.user)
-
     # Si se accede al form vía GET o cualquier otro método
     else:
-        actor = getActor(request.user)
-
         datos = {'first_name': actor.usuario.first_name, 'last_name': actor.usuario.last_name, 'email': actor.usuario.email, 
                  'poblacion': actor.poblacion, 'telefono': actor.telefono, 'direccion': actor.direccion, 'foto': actor.imagen}
         form = EditarPerfilForm(datos)
@@ -140,27 +134,5 @@ def editarClaves(request):
         
     return render(request, 'edicionClaves.html', data)
 
-
-#################################### Métodos privados  ###############################################
-
-def getActor(user):
-    """ Dado un usuario del modelo Django obtiene el actor asociado """
-
-    # Consulta Administradores
-    admins = Administrador.objects.filter(usuario = user)
-    if (admins.count() > 0):
-        return admins[0]
-
-    # Consulta Ciudadanos
-    ciudadanos = Ciudadano.objects.filter(usuario = user)
-    if (ciudadanos.count() > 0):
-        return ciudadanos[0]
-
-    # Consulta Funcionarios
-    funcionarios = Funcionario.objects.filter(usuario = user)
-    if (funcionarios.count() > 0):
-        return funcionarios[0]
-
-    return None
 
 

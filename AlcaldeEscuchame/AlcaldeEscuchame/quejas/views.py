@@ -1,4 +1,11 @@
 from django.shortcuts import render, get_object_or_404, get_object_or_404
+from app.decorators import usuario_role_ciudadano, usuario_role_funcionario
+import scipy
+import re
+from corpus.models import Modelo
+import numpy as np
+from scipy.spatial.distance import cosine
+from collections import Counter
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.core.paginator import Paginator
@@ -104,15 +111,14 @@ def listaQuejasPorCategoria(request, categoria_id):
 
 
 @login_required(login_url='/login/')
+@usuario_role_ciudadano
 def listaQuejasPropias(request):
     """ Lista las quejas del sistema que pertenecen al usuario autenticado """
     assert isinstance(request, HttpRequest)
 
-    # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea de tipo Ciudadano
+    # Valida que el usuario no sea anónimo (esté registrado y logueado)
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
-    elif not (request.user.actor.ciudadano):
-        return HttpResponseRedirect('/')
 
     actor = obtieneTipoActor(request.user)
     usuario = request.user
@@ -145,16 +151,15 @@ def listaQuejasPropias(request):
 
 
 @login_required(login_url='/login/')
+@usuario_role_funcionario
 def listaQuejasTramitables(request):
     """ Lista las quejas del sistema que pertenecen a las categorias asignadas al funcionario autenticado """
     assert isinstance(request, HttpRequest)
 
-    # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea de tipo Funcionario
+    # Valida que el usuario no sea anónimo (esté registrado y logueado)
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
-    elif not (request.user.actor.funcionario):
-        return HttpResponseRedirect('/')
-
+    
     actor = obtieneTipoActor(request.user)
     usuario = request.user
 
@@ -308,6 +313,7 @@ def detalleQueja(request, queja_id):
 
 
 @login_required(login_url='/login/')
+@usuario_role_ciudadano
 def formularioQueja(request, queja_id = None):
     """ Creación o Edición de una nueva Queja """
     assert isinstance(request, HttpRequest)
@@ -315,10 +321,6 @@ def formularioQueja(request, queja_id = None):
     # Valida que el usuario no sea anónimo (esté registrado y logueado)
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
-
-    # Valida que el usuario sea de tipo ciudadano:
-    if not (request.user.actor.ciudadano):
-        return HttpResponseRedirect('/')
 
     # Busca la queja y valida su edición
     if queja_id:
@@ -353,12 +355,40 @@ def formularioQueja(request, queja_id = None):
                 estado = 'Abierta'
                 referencia = generaReferencia()
 
+                # Consulta la variable de sesión que confirma la categorización y la elimina
+                confirmaCategoria = request.session.pop('confirmaCategoria', False)
+
                 # Categorización automática del sistema de manera aleatoria
-                indiceCategoria = categorizacionAutomatica(Categoria.objects.count())
-                if (indiceCategoria == -1):
+                #indiceCategoria = categorizacionAutomaticaRandom(Categoria.objects.count())
+                #if (indiceCategoria == -1):
+                #    categoriaAutomatica = categoriaManual
+                #else:
+                #    categoriaAutomatica = Categoria.objects.all()[indiceCategoria]
+
+                # Categorización automática del sistema
+                categoriaAutomatica = categorizacionAutomatica(cuerpo)
+                
+                # Si la categorización automática falla (o no existe modelo disponible), prevalece la cateogría manual
+                if (categoriaAutomatica is None):
                     categoriaAutomatica = categoriaManual
-                else:
-                    categoriaAutomatica = Categoria.objects.all()[indiceCategoria]
+                # Si la categorización es distinta a la del usuario y NO la ha confirmado, pide confirmación (variable de sesión)
+                elif (categoriaManual != categoriaAutomatica) and not(confirmaCategoria):
+                    # Activa la confirmación para la siguiente llamada
+                    request.session['confirmaCategoria'] = True
+                    # Datos del formulario pidiendo confirmación
+                    datosForm = {'titulo': titulo, 'cuerpo': cuerpo, 'categoria': categoriaManual.id}
+                    form = QuejaForm(datosForm)
+                    data = {
+                        'form': form,
+                        'actor': request.user.get_full_name(),
+                        'categorias': Categoria.objects.all(),
+                        'categorizacion': categoriaAutomatica,
+                        'titulo': 'Nueva Queja',
+                        'boton_submit': 'Continuar con la publicación',
+                        'year': datetime.now().year,
+                    }
+
+                    return render(request, 'formularioQueja.html', data)
 
                 # Inserción de la queja en BD
                 queja = Queja.objects.create(fecha = fecha, referencia = referencia, titulo = titulo, cuerpo = cuerpo, estado = estado,
@@ -373,6 +403,8 @@ def formularioQueja(request, queja_id = None):
 
     # Si se accede al form vía GET pidiendo creación
     else:
+        # Crea variable en sesión para confirmar categorización
+        request.session['confirmaCategoria'] = False
         form = QuejaForm();
 
     # Datos del modelo (vista)
@@ -382,7 +414,9 @@ def formularioQueja(request, queja_id = None):
         'form': form,
         'actor': request.user.get_full_name(),
         'categorias': categorias,
+        'categorizacion': None,
         'titulo': 'Nueva Queja',
+        'boton_submit': 'Publicar queja',
         'year': datetime.now().year,
     }
     
@@ -390,6 +424,7 @@ def formularioQueja(request, queja_id = None):
 
 
 @login_required(login_url='/login/')
+@usuario_role_ciudadano
 def eliminarQueja(request, queja_id):
     """ Elimina la queja indicada por su id """
     assert isinstance(request, HttpRequest)
@@ -397,10 +432,6 @@ def eliminarQueja(request, queja_id):
     # Valida que el usuario no sea anónimo (esté registrado y logueado)
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
-
-    # Valida que el usuario sea de tipo ciudadano:
-    if not (request.user.actor.ciudadano):
-        return HttpResponseRedirect('/')
 
     queja = get_object_or_404(Queja, pk=queja_id)
     # La queja solo puede eliminarse por su autor y si está abierta
@@ -414,6 +445,7 @@ def eliminarQueja(request, queja_id):
 
 
 @login_required(login_url='/login/')
+@usuario_role_funcionario
 def tramitarQueja(request, queja_id):
     """ Tramita la queja indicada por su id """
     assert isinstance(request, HttpRequest)
@@ -423,8 +455,8 @@ def tramitarQueja(request, queja_id):
         return HttpResponseRedirect('/login/')
 
     # Valida que el usuario sea de tipo Funcionario:
-    if not (hasattr(request.user.actor, 'funcionario')):
-        return HttpResponseForbidden()
+    #if not (hasattr(request.user.actor, 'funcionario')):
+    #    return HttpResponseForbidden()
 
     queja = get_object_or_404(Queja, pk=queja_id)
     # La queja solo puede tramitarse si está abierta y el Funcionario está a cargo de la categoría en la que el sistema
@@ -440,11 +472,12 @@ def tramitarQueja(request, queja_id):
 
 
 @login_required(login_url='/login/')
+@usuario_role_ciudadano
 def valorarQueja(request):
     """ Crea una nueva valoración para la queja indicada """
     assert isinstance(request, HttpRequest)
 
-    # Valida que el usuario no sea anónimo (esté registrado y logueado) y sea de tipo Ciudadano
+    # Valida que el usuario no sea anónimo (esté registrado y logueado)
     if not (request.user.is_authenticated):
         return HttpResponseRedirect('/login/')
 
@@ -519,7 +552,7 @@ def generaReferencia():
 
     return res
 
-def categorizacionAutomatica(numCategorias):
+def categorizacionAutomaticaRandom(numCategorias):
     """Categoriza la queja de manera aleatoria"""
     # Toma un número aleatorio del 1 al 100
     num = random.randint(1,100)
@@ -586,3 +619,65 @@ def esQuejaAgregable(usuario, queja):
         return False;
 
     return res
+
+def categorizacionAutomatica(texto):
+    """ Categoriza la queja (su texto) a partir del Modelo del sistema """
+
+    # Obtiene el modelo del sistema y lo carga
+    modelo = Modelo.objects.all().first()
+    # En caso de no existir, devuelve None
+    if (modelo is None) or not(modelo.ruta):
+        return None
+
+    matriz = np.load(modelo.ruta).item()
+    matriz = dict(matriz)
+
+    # Obtiene el vocabulario del propio modelo
+    vocab_matriz = next(iter(matriz.values()))
+    vocabulario = list(vocab_matriz)
+
+    # Obtiene el vector de conteo para la queja indicada como un diccionario
+    vector_conteo = obtieneVectorConteoQueja(texto, vocabulario)
+
+    # Calcula las distancias cosenos entre el vector de la queja y las almacena indexada por categoría
+    distancias = {}
+    vector_queja = list(vector_conteo.values())
+    for c in matriz.keys():
+        vector_categoria = list(matriz[c].values())
+        distancia = scipy.spatial.distance.cosine(vector_queja, vector_categoria)
+        distancias[c] = distancia
+    
+    # Obtiene el índice (key) con la menor distancia distancia (value)
+    i_menor_distancia = min(distancias, key = distancias.get)
+    # Obtiene la categoria que corresponde al índice de menor distancia
+    result = Categoria.objects.get(pk = i_menor_distancia)
+
+    return result
+
+def obtieneVectorConteoQueja(texto, vocabulario):
+    """ Dado el texto de una queja y el vocabulario del Modelo, obtiene el vector de conteo normalizado """
+
+    texto = texto.lower()
+    palabras = re.findall('\w+', texto)
+    palabras_queja = [p.replace('ñ', 'n').replace('á', 'a').replace('é', 'e').replace('í', 'i').replace('ó', 'o').replace('ú', 'u') for p in palabras]
+
+    # Cuenta el número de apariciones de las palabras del vocabulario en la queja
+    frecuencia = Counter()
+    # Recorre cada palabra del Vocabulario
+    for p_vocab in vocabulario:
+        # Cuenta las apariciones de la palabra del vocabulario en la queja
+        count = palabras_queja.count(p_vocab)
+        # Normaliza y guarda
+        frecuencia[p_vocab] = count
+
+    # Creo el vector de conteo (frecuencias) como un diccionario
+    vector_conteo = dict(frecuencia)
+
+    # Normaliza teniento en cuenta que no se puede dividir por 0 (caso en que ninguna palabra del texto de la queja esté en el vocabulario del modelo)
+    divisor = sum(vector_conteo.values())
+    if (divisor == 0): 
+        divisor = 1
+    factor = 1.0/divisor
+    vector_conteo = {k: v*factor for k, v in vector_conteo.items() }
+
+    return vector_conteo

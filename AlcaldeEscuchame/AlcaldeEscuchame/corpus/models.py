@@ -1,4 +1,5 @@
 from django.db import models
+from AlcaldeEscuchame import settings
 from django.core.validators import RegexValidator
 import corpus
 from categorias.models import Categoria
@@ -40,7 +41,7 @@ class EntradaCorpusAdmin(admin.ModelAdmin):
 # Modelo: fecha actualización, matriz de ponderación, corpus.
 class Modelo(models.Model):
     actualizacion = models.DateTimeField(verbose_name = "Última actualización", auto_now = True)
-    #matriz = models.ArrayField()
+    ruta = models.FilePathField(settings.STATIC_ROOT +'/corpus/modelo.npy', null = True, editable = False)
 
     # Relaciones
     corpus = models.OneToOneField(Corpus, on_delete = models.CASCADE, primary_key = True)
