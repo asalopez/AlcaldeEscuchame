@@ -3,7 +3,8 @@
 
 # Environment and others
 .Python
-EnvAcer//
+AlcaldeEscuchame/AlcaldeEscuchame/EnvAcer/
+EnvAcer/
 build/
 develop-eggs/
 dist/
