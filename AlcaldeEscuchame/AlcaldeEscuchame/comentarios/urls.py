@@ -12,6 +12,3 @@ import django.contrib.auth.views
 urlpatterns = [
     url(r'^nuevo/$', views.nuevoComentario, name='nuevoComentario')
 ]
-
-    
-    

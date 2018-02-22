@@ -12,9 +12,11 @@
         <br/>
         <div class="well">
             <div class="media">
-                <div class="media-body">
+                <div class="media-body" style="text-align:justify;">
+                    <div class="col-md-2 col-lg-2" style="float:right">
+                        <img alt="foto" src="{{ queja.ciudadano.imagen|default:"https://farm5.staticflickr.com/4690/38460664095_14c3663e93_b.jpg" }}" class="img-circle img-responsive">
+                    </div>
                     <h3 class="media-heading">{{ queja.titulo }}</h3>
-                    <p class="text-right">{{ queja.ciudadano.usuario.get_full_name }}</p>
                     <br/>
                     <p>{{ queja.cuerpo | linebreaks }}</p>
                     <br/>
@@ -45,6 +47,8 @@
                         <li><span><i class="glyphicon glyphicon-tag"></i> {{ queja.referencia }}</span></li>
                         <li>|</li>
                         <li><span><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Categor&#237;a: <a href="/quejas/categoria/{{ queja.categoriaManual.id }}/">{{ queja.categoriaManual.nombre }}</a></span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Por: {{ queja.ciudadano.usuario.get_full_name }}</span></li>
                     </ul>
                     {% if queja.estado == 'Abierta' and queja.ciudadano.usuario == actor %}
                         <p class="text-right">

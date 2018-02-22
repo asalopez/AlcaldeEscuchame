@@ -56,7 +56,7 @@
                             </td>
                         {% endif %}
                         <td class="text-center">
-                            <div style="margin:2px;"><a class='btn btn-info btn-xs' href="/quejas/{{queja.id}}/"><span class="glyphicon glyphicon-eye-open"> </span> Ver M&#225;s</a></div>
+                            <div style="margin:2px;"><a class='btn btn-info btn-xs' href="{% url 'quejaDetalle' queja.id %}"><span class="glyphicon glyphicon-eye-open"> </span> Ver M&#225;s</a></div>
                             <!-- Bot&#243;n Editar/Eliminar Queja: solo si es ciudadano, es su queja y sigue abierta -->
                             {% if actor == 'Ciudadano' and queja.ciudadano == usuario.actor.ciudadano and queja.estado == 'Abierta' %} 
                             <div style="margin:2px;"><a class='btn btn-warning btn-xs' href="{% url 'editarQueja' queja.id %}"><span class="glyphicon glyphicon-edit">&nbsp; </span> Editar</a></div>

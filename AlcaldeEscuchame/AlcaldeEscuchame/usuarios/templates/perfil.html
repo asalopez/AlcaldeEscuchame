@@ -8,7 +8,7 @@
 <div class="row">
 
     <div class="col-md-5  toppad  pull-right col-md-offset-3 ">
-        <a href="/perfil/editar/">Editar Perfil</a>
+        <a href="{% url 'editarPerfil' %}">Editar Perfil</a>
         <br/>
         <a href="{% url 'cambioClaves' %}">Cambiar Contrase&#241;a</a>
         <br/>
@@ -59,7 +59,7 @@
                         {% if tipoActor == 'Ciudadano' %}
                         <a href="{% url 'quejasPropias' %}" class="btn btn-primary">Ver mis quejas</a>
                         {% endif %}
-                        <a href="/perfil/editar/" class="btn btn-warning">Cambiar mis datos</a>
+                        <a href="{% url 'editarPerfil' %}" class="btn btn-warning">Cambiar mis datos</a>
                     </div>
                 </div>
             </div>

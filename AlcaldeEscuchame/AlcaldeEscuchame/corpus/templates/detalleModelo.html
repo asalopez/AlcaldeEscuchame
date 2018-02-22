@@ -1,0 +1,52 @@
+﻿{% extends "app/layout.html" %}
+
+<!-- CONTENIDO -->
+{% block content %}
+
+<h2>{{ titulo }}</h2>
+
+<div class="row">
+
+    <!-- Detalle Modelo -->	
+    <div class="container-fluid well">
+		    <div class="btn-group" style="float:right;">
+                <a class="btn dropdown-toggle btn-info" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-cog"></span>&nbsp; Opciones &nbsp;<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="/admin/corpus/entradacorpus/"><span class="icon-wrench"></span> Ver Entradas</a></li>
+                    {% if modelo %}
+                        <li><a href="/admin/corpus/modelo/{{modelo.pk}}/delete/"><span class="icon-trash"></span> Eliminar Modelo</a></li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div>
+                {% if modelo %}
+                    <h3>Datos informativos sobre el modelo actual empleado en la categorizaci&#243;n autom&#225;tica</h3>
+                {% else %}
+                    <h3>Actualmente el sistema no dispone de un modelo para realizar la categorizaci&#243;n autom&#225;tica</h3>
+                {% endif %}
+                <ul>
+                    <li>N&#250;mero de categor&#237;as que constituyen el modelo: {{ datos_modelo.categorias }} categor&#237;as.</li>
+                    <li>N&#250;mero de palabras que conforman el vocabulario: {{ datos_modelo.vocabulario }} palabras.</li>
+                    <li>&#218;ltima actualizaci&#243;n del modelo: {{ datos_modelo.fecha | default:"No procede." }}</li>
+                </ul>
+            </div>
+        <!-- Si existe el modelo, permite Descarga o Reconstruir modelo -->
+        <div style="text-align:center;">
+        {% if modelo %}
+            <a href="{% url 'descargaModelo' %}" class="btn btn-block btn-primary"><span class="glyphicon glyphicon-cloud-download"></span>&nbsp; Descargar Modelo .NPY</a>
+            <a href="{% url 'reconstruyeModelo' %}" class="btn btn-block btn-warning"><span class="glyphicon glyphicon-retweet"></span>&nbsp; Reconstruir Modelo</a>
+            <br/>
+            <p style="text-align:left;">
+                <i class="glyphicon glyphicon-info-sign"></i>&nbsp; Para la carga y lectura del fichero descargado (extensi&#243;n .NPY), se recomienda el uso de softwares de terceros. Por ejemplo: <a href="http://pythonhosted.org/spyder/installation.html">Spyder</a>.
+            </p>
+        <!-- Si no existe, permite Crear Modelo -->
+        {% else %}
+            <a href="{% url 'reconstruyeModelo' %}" class="btn btn-block btn-success"><span class="glyphicon glyphicon-retweet"></span>&nbsp; Construir Modelo</a>
+        {% endif %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}
+

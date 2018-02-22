@@ -4,14 +4,10 @@ Definition of urls for AlcaldeEscuchame.
 #encoding:utf-8
 
 from datetime import datetime
-import comentarios
-from comentarios import views
 from django.conf.urls import url
 import django.contrib.auth.views
-
 import app.forms
 import app.views
-from usuarios import views as usuarios_views
 
 # Uncomment the next lines to enable the admin:
 from django.conf.urls import include

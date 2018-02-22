@@ -50,7 +50,7 @@ def nuevoComentario(request):
             cuerpo = form.cleaned_data["cuerpo"]
 
             # Otros campos del comentario
-            autor = getActor(request.user)
+            autor = request.user.actor
             fecha = datetime.now()
             queja_id = form.cleaned_data["queja"]
 
@@ -74,18 +74,5 @@ def nuevoComentario(request):
             return HttpResponseRedirect(reverse('quejaDetalle', kwargs={'queja_id': queja_id}))
         
     return HttpResponseRedirect(reverse('quejaDetalle', kwargs={'queja_id': queja_id}))
-
-
-########################################## Métodos privados  ##################################################################
-
-def getActor(user):
-    """ Dado un usuario del modelo Django obtiene el actor asociado """
-
-    # Consulta Administradores
-    actores = Actor.objects.filter(usuario = user)
-    if (actores.count() > 0):
-        return actores[0]
-
-    return None
 
 
