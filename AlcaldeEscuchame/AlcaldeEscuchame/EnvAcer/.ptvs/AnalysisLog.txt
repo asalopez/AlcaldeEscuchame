@@ -21492,3 +21492,7 @@ System.FormatException: La cadena de entrada no tiene el formato correcto.
 2018-02-22T19:24:54: Deleting 2 files
 2018-02-22T19:24:54: Deleting "C:\Proyectos\AlcaldeEscuchame\AlcaldeEscuchame\AlcaldeEscuchame\EnvAcer\.ptvs\_dummy_threading.idb"
 2018-02-22T19:24:54: Deleting "C:\Proyectos\AlcaldeEscuchame\AlcaldeEscuchame\AlcaldeEscuchame\EnvAcer\.ptvs\_dummy__threading_local.idb"
+
+2018-02-23T10:15:13: Start analysis
+2018-02-23T10:15:15: IncludeModulesFromModulePath = win32com
+2018-02-23T10:15:34: Deleting 0 files

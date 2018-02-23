@@ -112,10 +112,8 @@ class TestViews(TestCase):
         url = reverse('quejasPropias')
         response = self.client.get(url)
 
-        # Comprueba que la respuesta recibida sea un Redirect al login
-        self.assertTrue(isinstance(response, HttpResponseRedirect))
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response._headers['location'][1] == '/')
+        # Comprueba que la respuesta recibida sea un Forbidden 403
+        self.assertTrue(isinstance(response, HttpResponseForbidden))
 
 
     def test_get_listaQuejasTramitables(self):
@@ -149,14 +147,12 @@ class TestViews(TestCase):
         # Simula Ciudadano 1 registrado y logueado
         self.client.login(username="ciudadano1", password="ciudPass1")
 
-        # Usuario Funcionario intenta acceder al listado de quejas tramitables
+        # Usuario ciudadano intenta acceder al listado de quejas tramitables
         url = reverse('quejasTramitables')
         response = self.client.get(url)
 
-        # Comprueba que la respuesta recibida sea un Redirect al login
-        self.assertTrue(isinstance(response, HttpResponseRedirect))
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(response._headers['location'][1] == '/')
+        # Comprueba que la respuesta recibida sea un Forbidden 403
+        self.assertTrue(isinstance(response, HttpResponseForbidden))
 
 
     def test_get_listaQuejasBuscador(self):
@@ -213,17 +209,17 @@ class TestViews(TestCase):
 
     def test_get_tramitarQueja(self):
         """Test para la tramitación de una queja (tramitable) mediante un funcionario capacitado para ello"""
-        # Simula Ciudadano 1 registrado y logueado
+        # Simula Funcionario 1 registrado y logueado
         self.client.login(username="funcionario1", password="funcPass1")
         
         # Tramitación de la queja de id indicado
-        url = reverse('tramitarQueja',  kwargs={'queja_id': 37})
+        url = reverse('tramitarQueja',  kwargs={'queja_id': 41})
         response = self.client.get(url)
 
         # Comprueba que la respuesta HTTP sea la correcta
         self.assertTrue(isinstance(response, HttpResponseRedirect))
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(response._headers['location'][1] == '/quejas/37/')
+        self.assertTrue(response._headers['location'][1] == '/quejas/41/')
 
 
     def test_get_tramitarQueja_invalido1(self):
@@ -258,7 +254,7 @@ class TestViews(TestCase):
         self.client.login(username="funcionario2", password="funcPass2")
 
         # Tramitación de la queja de id indicado
-        url = reverse('tramitarQueja',  kwargs={'queja_id': 37})
+        url = reverse('tramitarQueja',  kwargs={'queja_id': 40})
         response = self.client.get(url)
 
         # Comprueba que la respuesta HTTP sea la correcta
@@ -270,14 +266,14 @@ class TestViews(TestCase):
         # Simula Ciudadano 1 registrado y logueado
         self.client.login(username="ciudadano1", password="ciudPass1")
 
-        # Valoración del usuario a la queja con Id 37 con 5 puntos
+        # Valoración del usuario a la queja con Id 41 con 5 puntos
         url = reverse('valorarQueja')
-        response = self.client.get(url, {'puntuacion':5, 'queja': 37})
+        response = self.client.get(url, {'puntuacion':5, 'queja': 41})
 
         # Comprueba que la respuesta HTTP sea la correcta
         self.assertTrue(isinstance(response, HttpResponseRedirect))
         self.assertEqual(response.status_code, 302)
-        self.assertTrue(response._headers['location'][1] == '/quejas/37/')
+        self.assertTrue(response._headers['location'][1] == '/quejas/41/')
 
 
     def test_get_valorarQueja_invalido1(self):
@@ -311,9 +307,9 @@ class TestViews(TestCase):
         # Simula Ciudadano 1 registrado y logueado
         self.client.login(username="ciudadano1", password="ciudPass1")
 
-        # Valoración del usuario a la queja con Id 37 con 10 puntos
+        # Valoración del usuario a la queja con Id 41 con 10 puntos
         url = reverse('valorarQueja')
-        response = self.client.get(url, {'puntuacion':10, 'queja': 37})
+        response = self.client.get(url, {'puntuacion':10, 'queja': 41})
 
         # Comprueba que la respuesta HTTP sea la correcta
         self.assertTrue(isinstance(response, HttpResponseForbidden))
