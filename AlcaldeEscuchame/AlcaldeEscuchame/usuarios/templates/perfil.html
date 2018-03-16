@@ -1,0 +1,97 @@
+{% extends "app/layout.html" %}
+
+<!-- CONTENIDO -->
+{% block content %}
+
+<h2>{{ titulo }}</h2>
+
+<div class="row">
+
+    <div class="col-md-5  toppad  pull-right col-md-offset-3 ">
+        <a href="{% url 'editarPerfil' %}">Editar Perfil</a>
+        <br/>
+        <a href="{% url 'cambioClaves' %}">Cambiar Contrase&#241;a</a>
+        <br/>
+        <p class=" text-info">{{ fecha }}</p>
+    </div>
+
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 col-xs-offset-0 col-sm-offset-0 col-md-offset-3 col-lg-offset-3 toppad">
+        <div class="panel panel-info">
+            <div class="panel-heading">
+                <h3 class="panel-title">{{ actor.usuario.get_full_name }}</h3>
+            </div>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-3 col-lg-3" align="center">
+                        <img alt="foto" src="{{ actor.imagen|default:"https://farm5.staticflickr.com/4690/38460664095_14c3663e93_b.jpg" }}" class="img-circle img-responsive">
+                    </div>
+
+                    <div class=" col-md-9 col-lg-9 ">
+                        <table class="table table-user-information">
+                            <tbody>
+                                <tr>
+                                    <td>Nombre:</td>
+                                    <td>{{ actor.usuario.first_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Apellidos:</td>
+                                    <td>{{ actor.usuario.last_name }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email:</td>
+                                    <td><a href="mailto:{{ actor.usuario.email }}">{{ actor.usuario.email }}</a></td>
+                                </tr>
+                                <tr>
+                                    <td>Tel&#233;fono:</td>
+                                    <td>{{ actor.telefono|default:"-" }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Poblaci&#243;n:</td>
+                                    <td>{{ actor.poblacion }}</td>
+                                </tr>
+                                <tr>
+                                    <td>Direcci&#243;n:</td>
+                                    <td>{{ actor.direccion | default:"-" }}</td>
+                                </tr>                                
+                            </tbody>
+                        </table>
+
+                        {% if tipoActor == 'Ciudadano' %}
+                        <a href="{% url 'quejasPropias' %}" class="btn btn-primary">Ver mis quejas</a>
+                        {% endif %}
+                        <a href="{% url 'editarPerfil' %}" class="btn btn-warning">Cambiar mis datos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="panel-footer">
+                <!-- Bot&#243;n de Home y Contactar -->
+                <a href="/" data-original-title="Inicio" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary">
+                    <i class="glyphicon glyphicon-home"></i>
+                </a>
+                <a href="mailto:papapa@hotmail.com" data-original-title="Contactar" data-toggle="tooltip" type="button" class="btn btn-sm btn-primary">
+                    <i class="glyphicon glyphicon-envelope"></i>
+                </a>
+                <!-- Bot&#243;n de Cierre de Sesi&#243;n -->
+                <span class="pull-right">                    
+                    <a href="javascript:document.getElementById('logoutForm').submit()" data-original-title="Cerrar Sesi&#243;n" data-toggle="tooltip" type="button" class="btn btn-sm btn-danger">
+                        <i class="glyphicon glyphicon-log-out"></i>
+                    </a>
+                </span>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <section id="socialLoginForm"></section>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load staticfiles %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+{% extends "app/layout.html" %}
+
+<!-- CONTENIDO -->
+{% block content %}
+
+<h2>{{ titulo }}</h2>
+
+<div class="row">
+
+    <!-- Detalle Queja -->
+    <div class="container-fluid">
+        <br/>
+        <div class="well">
+            <div class="media">
+                <div class="media-body" style="text-align:justify;">
+                    <div class="col-md-2 col-lg-2" style="float:right">
+                        <img alt="foto" src="{{ queja.ciudadano.imagen|default:"https://farm5.staticflickr.com/4690/38460664095_14c3663e93_b.jpg" }}" class="img-circle img-responsive">
+                    </div>
+                    <h3 class="media-heading">{{ queja.titulo }}</h3>
+                    <br/>
+                    <p>{{ queja.cuerpo | linebreaks }}</p>
+                    <br/>
+                    <ul class="list-inline list-unstyled">
+                        <li><span><i class="glyphicon glyphicon-calendar"></i> {{ queja.fecha | date:'d/m/Y (H:i)' }} </span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-comment"></i> {{ comentarios.paginator.count }} Comentarios</span></li>
+                        <li>|</li>
+                        <li>
+                            <!-- Rating de la queja: una estrella rellena por cada punto -->
+                            {% for i in rangoPuntos %}
+                                {% if i < rating %}
+                                    <span class="glyphicon glyphicon-star"></span>
+                                {% else %}
+                                    <span class="glyphicon glyphicon-star-empty"></span>
+                                {% endif %}
+                            {% endfor %}
+                        </li>
+                        <li>|</li>
+                        <li>
+                            {% if queja.estado == 'Abierta' %}
+                                <span class="label label-medium label-success">{{ queja.estado | upper }}</span>
+                            {% else %}
+                                <span class="label label-danger">{{ queja.estado | upper }}</span>
+                            {% endif %}
+                        </li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-tag"></i> {{ queja.referencia }}</span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-folder-open"></i>&nbsp; Categor&#237;a: <a href="/quejas/categoria/{{ queja.categoriaManual.id }}/">{{ queja.categoriaManual.nombre }}</a></span></li>
+                        <li>|</li>
+                        <li><span><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Por: {{ queja.ciudadano.usuario.get_full_name }}</span></li>
+                    </ul>
+                    {% if queja.estado == 'Abierta' and queja.ciudadano.usuario == actor %}
+                        <p class="text-right">
+                            <a href="{% url 'editarQueja' queja.id %}" class="btn btn-warning"><i class="glyphicon glyphicon-edit"></i>&nbsp; Editar Queja</a>
+                            <a href="{% url 'eliminarQueja' queja.id %}" class='btn btn-danger' onclick="return confirmaAccion('elimina-queja')"><i class="glyphicon glyphicon-trash">&nbsp; </i> Eliminar</a>
+                        </p>
+                    {% elif actor.actor.administrador %}
+                        <span class="text-left">
+                            <i class="glyphicon glyphicon-info-sign"></i>&nbsp; Seg&#250;n la categorizaci&#243;n autom&#225;tica del sistema, esta queja deber&#237;a pertenecer a: <a href="/quejas/categoria/{{ queja.categoriaAutomatica.id }}/">{{ queja.categoriaAutomatica.nombre }}</a>
+                        </span>
+                        <span style="float:right"><a href="/admin/quejas/queja/{{queja.id}}/delete/" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp; Eliminar Queja</a></span>
+                        {% if agregable %}
+                        <span style="float:right; margin-right:3px;"><a href="{% url 'agregarQuejaCorpus' queja.id %}" class="btn btn-primary" onclick="return confirmaAccion('agrega-queja-corpus')"><i class="glyphicon glyphicon-plus-sign"></i>&nbsp; Agregar al Corpus</a></span>
+                        {% endif %}
+                    {% elif actor.actor.funcionario %}
+                        <span class="text-left">
+                            <i class="glyphicon glyphicon-info-sign"></i>&nbsp; Seg&#250;n la categorizaci&#243;n autom&#225;tica del sistema, esta queja deber&#237;a pertenecer a: <a href="/quejas/categoria/{{ queja.categoriaAutomatica.id }}/">{{ queja.categoriaAutomatica.nombre }}</a>
+                        </span>
+                        <!-- Tramitable si la queja est&#225; abierta y el funcionario est&#225; a cargo de la categorizaci&#243;n autom&#225;tica de la misma -->
+                        {% if tramitable %}
+                        <span style="float:right"><a href="{% url 'tramitarQueja' queja.id %}" class='btn btn-warning' onclick="return confirmaAccion('tramita-queja')"><i class="glyphicon glyphicon-saved"></i>&nbsp; Tramitar Queja</a></span>
+                        {% endif %}
+                    {% endif %}                
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Formulario Valoraci&#243;n si la queja es valorable por el usuario logueado -->
+    {% if valorable %}
+        {% include 'formularioValoracion.html' %}
+    {% endif %}
+
+    <!-- Tabla de Comentarios -->
+    {% include 'comentarios.html' %}
+
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load staticfiles %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+<script src="{% static 'app/scripts/utils.js' %}"></script>
+<script src="{% static 'app/scripts/valoraciones.js' %}"></script>
+{% endblock %}

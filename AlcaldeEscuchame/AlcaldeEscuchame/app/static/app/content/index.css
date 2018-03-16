@@ -1,0 +1,44 @@
+.jumbotron {
+    background-image: url('https://farm5.staticflickr.com/4751/28019267389_36eacfa8cd_h.jpg');
+    color: white;
+    background-size: cover;
+}
+
+/* Texto del Jumbotron */
+/*.jumbotron-title {
+    color: #b7a9a9 !important;
+    text-shadow: 0 0 5px white;
+}*/
+
+.jumbotron-title {
+    font-family: Impact, Charcoal, sans-serif;
+    color: white;
+    font: bold 52px Impact, Charcoal, sans-serif;
+    text-shadow: 1px 1px black, 2px 2px black, 3px 3px black;
+    -webkit-transition: all 0.12s ease-out;
+    -moz-transition: all 0.12s ease-out;
+    -ms-transition: all 0.12s ease-out;
+    -o-transition: all 0.12s ease-out;
+}
+
+    .jumbotron-title:hover {
+        position: relative;
+        top: -3px;
+        left: -3px;
+        text-shadow: 1px 1px black, 2px 2px black, 3px 3px black, 4px 4px black, 5px 5px black, 6px 6px black;
+    }
+
+.jumbotron-div {
+    background: rgba(17, 15, 15, 0.50);
+    border-radius: 25px;
+}
+
+.jumbotron-p {
+    text-align: justify;
+    text-shadow: 1px 1px 0 black, 2px 2px 0 black;
+    padding: 13px;
+}
+
+.col-p {
+    text-align: justify;
+}

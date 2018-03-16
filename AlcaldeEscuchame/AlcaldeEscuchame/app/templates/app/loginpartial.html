@@ -1,17 +1,30 @@
+<!-- USUARIOS AUTENTICADOS -->
 {% if user.is_authenticated %}
+
 <form id="logoutForm" action="/logout" method="post" class="navbar-right">
     {% csrf_token %}
     <ul class="nav navbar-nav navbar-right">
-        <li><span class="navbar-brand">Hello {{ user.username }}!</span></li>
-        <li><a href="javascript:document.getElementById('logoutForm').submit()">Log off</a></li>
+        <li><a href="#" class="navbar-brand dropdown-toggle" data-toggle="dropdown">&#161; Hola, {{ user.first_name }} ! &nbsp;<span><i class="glyphicon glyphicon-user"></i></span></a>
+            <ul class="dropdown-menu">
+                <li><a href="{% url 'perfil' %}">Mi perfil</a></li>
+                {% if user.is_staff %}
+                <li class="divider"></li>
+                <li><a href="/admin/">Panel Administraci&#243;n</a></li>
+                {% endif %}
+                <li class="divider"></li>
+                <li><a href="javascript:document.getElementById('logoutForm').submit()">Cerrar Sesi&#243;n</a></li>
+            </ul>
+        
+        </li>        
     </ul>
-
 </form>
 
 {% else %}
 
+<!-- USUARIOS NO AUTENTICADOS -->
 <ul class="nav navbar-nav navbar-right">
-    <li><a href="{% url 'login' %}">Log in</a></li>
+    <li><a href="{% url 'login' %}">Iniciar Sesi&#243;n</a></li>
+    <li><a href="{% url 'registro' %}">Registrarse</a></li>
 </ul>
 
 {% endif %}

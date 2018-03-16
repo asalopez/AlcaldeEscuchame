@@ -1,0 +1,108 @@
+{% extends "app/layout.html" %}
+
+<!-- CONTENIDO -->
+{% block content %}
+
+<h2>{{ titulo }}</h2>
+
+<div class="container-fluid">
+        <!-- Nueva Queja -->
+        {% if actor == 'Ciudadano' %}
+        <div class="col-md-5 toppad pull-right col-md-offset-3 ">
+            <a href="{% url 'nuevaQueja' %}" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span>&nbsp; Nueva Queja</a>
+        </div>
+        {% endif %}
+
+        <hr/>
+
+        <!-- Tabla si hay registros -->
+        {% if quejas %}
+        <div class="table-responsive">
+            <table class="table table-striped table-hover custab">            
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th style="width:10%;">Categor&#237;a</th>
+                        <th class="text-center">Estado</th>
+                        <th>Nombre</th>
+                        <th style="width:10%;">Descripci&#243;n</th>
+                        {% if actor == 'Administrador' or actor == 'Funcionario' %}
+                        <th style="width:10%;">Categorizaci&#243;n</th>
+                        {% endif %}
+                        <th class="text-center"></th> 
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for queja in quejas %}
+                    <tr>
+                        <td class="text-center">{{ queja.fecha | date:'d/m/Y (H:i)' }}</td>
+                        <td class="text-center">
+                            <img alt="{{ queja.categoriaManual.nombre }}" src="{{ queja.categoriaManual.imagen|default:"https://farm5.staticflickr.com/4698/38866721655_bbe22eda25_h.jpg" }}" class="img-rounded img-responsive">
+                            <span style="font-size: 75%;">{{ queja.categoriaManual.nombre }}</span>
+                        </td>
+                        <td class="text-center">
+                            {% if queja.estado == 'Abierta' %}
+                                <span class="label label-medium label-success">{{ queja.estado | upper }}</span>
+                            {% else %}
+                                <span class="label label-danger">{{ queja.estado | upper }}</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ queja.titulo }}</td>
+                        <td width="40%">{{ queja.cuerpo | linebreaks | truncatewords:30 }}</td>
+                        {% if actor == 'Administrador' or actor == 'Funcionario' %}
+                            <td class="text-center">
+                                <img alt="{{ queja.categoriaAutomatica.nombre }}" src="{{ queja.categoriaAutomatica.imagen|default:"https://farm5.staticflickr.com/4698/38866721655_bbe22eda25_h.jpg" }}" class="img-rounded img-responsive">
+                                <span style="font-size: 75%;">{{ queja.categoriaAutomatica.nombre }}</span>
+                            </td>
+                        {% endif %}
+                        <td class="text-center">
+                            <div style="margin:2px;"><a class='btn btn-info btn-xs' href="{% url 'quejaDetalle' queja.id %}"><span class="glyphicon glyphicon-eye-open"> </span> Ver M&#225;s</a></div>
+                            <!-- Bot&#243;n Editar/Eliminar Queja: solo si es ciudadano, es su queja y sigue abierta -->
+                            {% if actor == 'Ciudadano' and queja.ciudadano == usuario.actor.ciudadano and queja.estado == 'Abierta' %} 
+                            <div style="margin:2px;"><a class='btn btn-warning btn-xs' href="{% url 'editarQueja' queja.id %}"><span class="glyphicon glyphicon-edit">&nbsp; </span> Editar</a></div>
+                            <div style="margin:2px;"><a class='btn btn-danger btn-xs' onclick="return confirmaAccion('elimina-queja')" href="{% url 'eliminarQueja' queja.id %}"><span class="glyphicon glyphicon-trash">&nbsp; </span> Eliminar</a></div>
+                            <!-- Bot&#243;n Eliminar Queja si es administrador -->
+                            {% elif actor == 'Administrador' %}
+                            <div style="margin:2px;"><a class='btn btn-danger btn-xs' href="/admin/quejas/queja/{{queja.id}}/delete/"><span class="glyphicon glyphicon-trash">&nbsp; </span> Eliminar</a></div>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <!-- Paginaci&#243;n de la tabla -->
+            <div class="row">
+                <nav aria-label="Paginaci&#243;n">
+                    <ul class="pager">
+                        <!-- Resultados -->
+                        <li class="pull-left"><strong>Se han econtrado {{ quejas.paginator.count }} registros</strong></li>
+                        {% if quejas.has_next %}
+                            <li class="pull-right"><a href="?page={{ quejas.next_page_number }}">Siguiente &#187;</a></li>
+                        {% endif %}
+                        <li class="pull-right"><a disabled>P&#225;gina {{ quejas.number }} de {{ quejas.paginator.num_pages }}</a></li>
+                        {% if quejas.has_previous %}
+                            <li class="pull-right"><a href="?page={{ quejas.previous_page_number }}">&#171; Anterior</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>        
+        <!-- Mensaje si no se han encontrado registros -->
+        {% else %}            
+        <div class="row">
+            <h3>No se han encontrado quejas en el sistema.</h3>
+        </div>
+        {% endif %}
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load staticfiles %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+<script src="{% static 'app/scripts/utils.js' %}"></script>
+
+{% endblock %}

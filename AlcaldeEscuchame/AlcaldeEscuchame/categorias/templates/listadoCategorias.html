@@ -1,0 +1,91 @@
+{% extends "app/layout.html" %}
+
+<!-- CONTENIDO -->
+{% block content %}
+
+<h2>{{ titulo }}</h2>
+
+<div class="container-fluid">
+        <!-- Nueva Categor&#237;a -->
+        {% if actor == 'Administrador' %}
+        <div class="col-md-5 toppad pull-right col-md-offset-3 ">
+            <a href="/admin/categorias/categoria/add/" class="btn btn-primary pull-right"><span class="glyphicon glyphicon-plus"></span>&nbsp; Nueva Categor&#237;a</a>
+        </div>
+        {% endif %}
+
+        <hr/>
+
+        <!-- Tabla si hay registros -->
+        {% if categorias %}
+        <div class="table-responsive">
+            <table id="tablaCategorias" class="table table-striped table-hover custab">            
+                <thead>
+                    <tr>
+                        <th style="width:20%;"></th>
+                        <th style="width:15%;">Nombre &nbsp;&nbsp;
+                            {% if direction == 'asc' %}
+                            <a style="color:black;" href="?order_by=nombre&direction=desc"><i class="glyphicon glyphicon-sort-by-alphabet-alt"></i></a>
+                            {% else %}
+                            <a style="color:black;" href="?order_by=nombre&direction=asc"><i class="glyphicon glyphicon-sort-by-alphabet"></i></a>
+                            {% endif %}
+                        </th>
+                        <th>Descripci&#243;n</th>
+                        <th></th>
+                        {% if actor == 'Administrador' %}
+                        <th class="text-center"></th>
+                        {% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for categoria in categorias %}
+                    <tr>
+                        <td><img alt="{{ categoria.nombre }}" src="{{ categoria.imagen|default:"https://farm5.staticflickr.com/4698/38866721655_bbe22eda25_h.jpg" }}" class="img-thumbnail img-responsive"></td>
+                        <td>
+                            {{ categoria.nombre }}
+                            {% if categoria in categoriasFuncionario %}
+                                <h4><span class="label label-big label-success">ASIGNADA</span></h4>
+                            {% endif %}
+                        </td>
+                        <td>{{ categoria.descripcion | linebreaks }}</td>
+                        <td class="text-center"><a class='btn btn-info btn-md' href="/quejas/categoria/{{categoria.id}}/"><span class="glyphicon glyphicon-eye-open">&nbsp; </span>Ver Quejas</a></td>
+                        {% if actor == 'Administrador' %}
+                        <td class="text-center"><a class='btn btn-warning btn-md' href="/admin/categorias/categoria/{{categoria.id}}/change/"><span class="glyphicon glyphicon-edit">&nbsp; </span>Editar</a></td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <!-- Paginaci&#243;n de la tabla -->
+            <div class="row">
+                <nav aria-label="Paginaci&#243;n">
+                    <ul class="pager">
+                        <!-- Resultados -->
+                        <li class="pull-left"><strong>Se han encontrado {{ categorias.paginator.count }} registros</strong></li>
+                        {% if categorias.has_next %}
+                            <li class="pull-right"><a href="?order_by=nombre&direction={{ direction|default:"" }}&page={{ categorias.next_page_number }}">Siguiente &#187;</a></li>
+                        {% endif %}
+                        <li class="pull-right"><a disabled>P&#225;gina {{ categorias.number }} de {{ categorias.paginator.num_pages }}</a></li>
+                        {% if categorias.has_previous %}
+                            <li class="pull-right"><a href="?order_by=nombre&direction={{ direction|default:"" }}&page={{ categorias.previous_page_number }}">&#171; Anterior</a></li>
+                        {% endif %}
+                    </ul>
+                </nav>
+            </div>
+        </div>    
+        <!-- Mensaje si no se han encontrado regitros -->
+        {% else %}            
+        <div class="row">
+            <h3>No se han encontrado categor&#237;as en el sistema.</h3>
+        </div>
+        {% endif %}
+</div>
+
+{% endblock %}
+
+
+{% block scripts %}
+
+    {% load staticfiles %}
+<script src="{% static 'app/scripts/jquery.validate.min.js' %}"></script>
+
+{% endblock %}
