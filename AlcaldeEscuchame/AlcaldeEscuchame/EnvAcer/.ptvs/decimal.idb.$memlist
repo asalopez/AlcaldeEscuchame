@@ -5,11 +5,11 @@ FloatOperation
 Context
 threading
 DivisionUndefined
-Underflow
+ROUND_CEILING
 __decimal_context__
 BasicContext
 DivisionByZero
-setcontext
+ROUND_FLOOR
 Subnormal
 HAVE_THREADS
 DefaultContext
@@ -28,11 +28,11 @@ re
 ROUND_HALF_DOWN
 __doc__
 MAX_EMAX
-ROUND_CEILING
+Underflow
 MIN_EMIN
 ROUND_HALF_UP
 sys
-ROUND_FLOOR
+setcontext
 localcontext
 DecimalTuple
 ROUND_HALF_EVEN
