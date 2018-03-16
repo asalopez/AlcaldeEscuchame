@@ -1,7 +1,7 @@
 from django.contrib import admin
-from quejas.models import Valoracion, ValoracionAdmin
-from quejas.models import Queja, QuejaAdmin
+from quejas.models import Valoracion, ValoracionAdminPanel
+from quejas.models import Queja, QuejaAdminPanel
 
 # Register your models here.
-admin.site.register(Queja, QuejaAdmin);
-admin.site.register(Valoracion, ValoracionAdmin);
+admin.site.register(Queja, QuejaAdminPanel)
+admin.site.register(Valoracion, ValoracionAdminPanel)

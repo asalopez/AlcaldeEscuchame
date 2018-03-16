@@ -21496,3 +21496,71 @@ System.FormatException: La cadena de entrada no tiene el formato correcto.
 2018-02-23T10:15:13: Start analysis
 2018-02-23T10:15:15: IncludeModulesFromModulePath = win32com
 2018-02-23T10:15:34: Deleting 0 files
+
+2018-03-16T11:10:34: Start analysis
+2018-03-16T11:10:35: IncludeModulesFromModulePath = win32com
+2018-03-16T11:10:39: Including c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2 because psycopg2._psycopg needs updating
+2018-03-16T11:10:39: Including c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2 because psycopg2.tests.dbapi20 needs updating
+2018-03-16T11:10:39: Deleting 0 files
+2018-03-16T11:10:39: Scraping psycopg2._psycopg
+2018-03-16T11:10:39: Command: C:\Proyectos\AlcaldeEscuchame\AlcaldeEscuchame\AlcaldeEscuchame\EnvAcer\Scripts\python.exe "C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\Common7\IDE\Extensions\Microsoft\Python\Core\ExtensionScraper.py" scrape psycopg2._psycopg c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages C:\Proyectos\AlcaldeEscuchame\AlcaldeEscuchame\AlcaldeEscuchame\EnvAcer\.ptvs\psycopg2\psycopg2._psycopg
+2018-03-16T11:10:40: Scraped 1 files
+2018-03-16T11:10:40: astropy.CallDepth = 0
+2018-03-16T11:10:40: delphixpy.CallDepth = 0
+2018-03-16T11:10:40: matplotlib.CallDepth = 3
+2018-03-16T11:10:40: pandas.CallDepth = 0
+2018-03-16T11:10:40: sympy.CallDepth = 0
+2018-03-16T11:10:40: Start group "c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2" with 11 files
+2018-03-16T11:10:40: Parsing complete
+2018-03-16T11:10:40: Analyzing "psycopg2.errorcodes" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\errorcodes.py")
+2018-03-16T11:10:40: Analyzing "psycopg2.extensions" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\extensions.py")
+2018-03-16T11:10:40: Analyzing "psycopg2.extras" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\extras.py")
+2018-03-16T11:10:40: Analyzing "psycopg2.pool" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\pool.py")
+2018-03-16T11:10:40: Analyzing "psycopg2.psycopg1" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\psycopg1.py")
+2018-03-16T11:10:40: Analyzing "psycopg2.sql" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\sql.py")
+2018-03-16T11:10:40: Analyzing "psycopg2.tz" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tz.py")
+2018-03-16T11:10:40: Analyzing "psycopg2._ipaddress" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\_ipaddress.py")
+2018-03-16T11:10:40: Analyzing "psycopg2._json" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\_json.py")
+2018-03-16T11:10:40: Analyzing "psycopg2._range" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\_range.py")
+2018-03-16T11:10:40: Analyzing "psycopg2" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\__init__.py")
+2018-03-16T11:10:40: Starting analysis of 11 modules
+2018-03-16T11:10:42: Analysis complete
+2018-03-16T11:10:42: Saving group "c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2"
+2018-03-16T11:10:42: End of group "c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2"
+2018-03-16T11:10:42: Start group "c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2" with 30 files
+2018-03-16T11:10:43: Parsing complete
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.dbapi20" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\dbapi20.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.dbapi20_tpc" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\dbapi20_tpc.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.testconfig" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\testconfig.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.testutils" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\testutils.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_async" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_async.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_async_keyword" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_async_keyword.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_bugX000" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_bugX000.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_bug_gc" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_bug_gc.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_cancel" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_cancel.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_connection" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_connection.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_copy" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_copy.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_cursor" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_cursor.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_dates" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_dates.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_errcodes" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_errcodes.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_extras_dictcursor" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_extras_dictcursor.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_fast_executemany" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_fast_executemany.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_green" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_green.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_ipaddress" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_ipaddress.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_lobject" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_lobject.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_module" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_module.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_notify" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_notify.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_psycopg2_dbapi20" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_psycopg2_dbapi20.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_quote" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_quote.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_replication" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_replication.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_sql" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_sql.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_transaction" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_transaction.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_types_basic" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_types_basic.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_types_extras" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_types_extras.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests.test_with" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\test_with.py")
+2018-03-16T11:10:43: Analyzing "psycopg2.tests" ("c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2\tests\__init__.py")
+2018-03-16T11:10:43: Starting analysis of 30 modules
+2018-03-16T11:10:44: Analysis complete
+2018-03-16T11:10:44: Saving group "c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2"
+2018-03-16T11:10:44: End of group "c:\proyectos\alcaldeescuchame\alcaldeescuchame\alcaldeescuchame\envacer\lib\site-packages\psycopg2"
+2018-03-16T11:10:51: Deleting 0 files

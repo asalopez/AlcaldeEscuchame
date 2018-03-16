@@ -6,8 +6,10 @@ from categorias.models import Categoria
 from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 
-# Corpus: nombre
 class Corpus(models.Model):    
+    """
+    Corpus: nombre
+    """
     nombre = models.CharField(max_length = 80, null = True)
 
     def __str__(self):
@@ -17,8 +19,10 @@ class Corpus(models.Model):
         verbose_name_plural = "Corpus"
 
 
-# EntradaCorpus: referencia, texto, corpus, categoría.
 class EntradaCorpus(models.Model):
+    """
+    EntradaCorpus: referencia, texto, corpus, categoría.
+    """
     referencia = models.CharField(max_length = 7, editable = False, null = True, blank = True, default = "", validators = [RegexValidator(regex = r'^([a-zA-Z]{2})-([a-zA-Z0-9]{4})$', message = 'La referencia no cumple el patrón solicitado.')])
     texto = models.TextField(max_length = 6000, help_text = 'Formato recomentado: título, salto de línea y cuerpo.')
 
@@ -33,13 +37,17 @@ class EntradaCorpus(models.Model):
         verbose_name_plural = "Entradas corpus"
 
 
-# Clase que define los campos a mostrar en el Panel de Administración para el listado de entradas
-class EntradaCorpusAdmin(admin.ModelAdmin):
+class EntradaCorpusAdminPanel(admin.ModelAdmin):
+    """
+    Clase que define los campos a mostrar en el Panel de Administración para el listado de entradas
+    """
     list_display = ('corpus', 'referencia', 'categoria')
 
 
-# Modelo: fecha actualización, matriz de ponderación, corpus.
 class Modelo(models.Model):
+    """
+    Modelo: fecha actualización, matriz de ponderación, corpus.
+    """
     actualizacion = models.DateTimeField(verbose_name = "Última actualización", auto_now = True)
     ruta = models.FilePathField(settings.STATIC_ROOT +'/corpus/modelo.npy', null = True, editable = False)
 
@@ -50,6 +58,8 @@ class Modelo(models.Model):
         return 'Modelo ' + self.corpus.nombre
 
     
-# Clase que define los campos a mostrar en el Panel de Administración para el listado de modelos
-class ModeloAdmin(admin.ModelAdmin):
+class ModeloAdminPanel(admin.ModelAdmin):
+    """
+    Clase que define los campos a mostrar en el Panel de Administración para el listado de modelos
+    """
     list_display = ('corpus', 'actualizacion')

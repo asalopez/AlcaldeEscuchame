@@ -7,8 +7,11 @@ from usuarios.models import Ciudadano
 from django.core.validators import MinValueValidator, MaxValueValidator
 from categorias.models import Categoria
 
-# Queja: referencia, fecha, titulo, cuerpo, estado (Abierta ó Tramitada)
 class Queja(models.Model):
+    """
+    Queja: referencia, fecha, titulo, cuerpo, estado (Abierta ó Tramitada)
+    """
+
     # Posibles estados de una queja
     ABIERTA = 'Abierta'
     TRAMITADA = 'Tramitada'
@@ -37,13 +40,17 @@ class Queja(models.Model):
         return self.titulo + ' (' + self.referencia + ')'
 
 
-# Clase que define los campos a mostrar en el Panel de Administración para el listado de quejas
-class QuejaAdmin(admin.ModelAdmin):
+class QuejaAdminPanel(admin.ModelAdmin):
+    """
+    Clase que define los campos a mostrar en el Panel de Administración para el listado de Quejas
+    """
     list_display = ('titulo', 'categoriaManual', 'ciudadano', 'categoriaAutomatica', 'estado', 'fecha')
 
 
-# Valoración: puntos, ciudadano, queja.
 class Valoracion(models.Model):
+    """
+    Valoración: puntos, ciudadano, queja.
+    """
     puntuacion = models.IntegerField(validators = [MaxValueValidator(5), MinValueValidator(1)], help_text = 'Requerido. Rango de 1 a 5 (inclusives).')
 
     # Relaciones
@@ -58,6 +65,8 @@ class Valoracion(models.Model):
         unique_together = ('ciudadano', 'queja')
 
 
-# Clase que define los campos a mostrar en el Panel de Administración para el listado de valoraciones
-class ValoracionAdmin(admin.ModelAdmin):
+class ValoracionAdminPanel(admin.ModelAdmin):
+    """
+    Clase que define los campos a mostrar en el Panel de Administración para el listado de Valoraciones
+    """
     list_display = ('puntuacion', 'ciudadano', 'queja')

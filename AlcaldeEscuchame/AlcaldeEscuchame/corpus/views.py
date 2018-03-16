@@ -139,7 +139,7 @@ def reconstruyeModelo(request):
 
     # Crea/Actualiza el objeto Modelo en BD
     corpus = Corpus.objects.all().first()
-    Modelo.objects.update_or_create(ruta = ruta, corpus = corpus)
+    Modelo.objects.update_or_create(corpus = corpus)
 
     return HttpResponseRedirect('/corpus/modelo/')
 
@@ -242,10 +242,11 @@ def eliminaStopWords(palabras):
     res = []
 
     # Carga el fichero de palabras huecasç
-    ruta = settings.STATIC_ROOT +'/corpus/stopWords.txt'
-    f = open(ruta, 'r')
-    stopWords = f.read().splitlines()
-    stopWords = set(stopWords)
+    ruta = settings.STATIC_ROOT + '/corpus/stopWords.txt'
+    #f = open(ruta, 'r')
+    with open(ruta,'r', encoding="ISO-8859-1") as f:
+        stopWords = f.read().splitlines()
+        stopWords = set(stopWords)
 
     # Elimina de la lista esas palabras
     res = palabras.difference(stopWords)

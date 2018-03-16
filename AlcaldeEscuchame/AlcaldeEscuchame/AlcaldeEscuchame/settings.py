@@ -85,7 +85,11 @@ WSGI_APPLICATION = 'AlcaldeEscuchame.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': config('DB_ENGINE'),
-        'NAME': os.path.join(BASE_DIR, config('DB_NAME')),
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASS'),
+        'HOST': '127.0.0.1',
+	    'PORT': '5432',	# Puerto dado en pgAdmin para la BD.
     }
 }
 

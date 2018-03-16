@@ -5,8 +5,10 @@ from categorias.models import Categoria
 from django.contrib import admin
 from django.contrib.admin.options import ModelAdmin
 
-# Actor: poblacion, teléfono, dirección, foto, usuario.
 class Actor(models.Model):
+    """
+    Clase para definir el modelo Actor: poblacion, teléfono, dirección, foto, usuario.
+    """
     poblacion = models.CharField(max_length = 30, help_text = 'Requerido. 30 carácteres como máximo.')
     telefono = models.CharField(max_length = 9, null = True, blank = True, help_text = 'Opcional. 9 dígitos como máximo. Debe comenzar por 6 ó 9.',
                                 validators = [RegexValidator(regex = r'^(6|9)(\d{8})$', message = 'El teléfono no cumple con el patrón solicitado.')])
@@ -23,28 +25,37 @@ class Actor(models.Model):
         verbose_name_plural = "Actores"
 
 
-# Clase que define los campos a mostrar en el Panel de Administración para el listado de ciudadanos
-class ActorAdmin(admin.ModelAdmin):
+class ActorAdminPanel(admin.ModelAdmin):
+    """
+    Clase que oculta el modelo en el panel de administración.
+    """
+    def get_model_perms(self, request):
+        return {}
+
+
+class Ciudadano(Actor):
+    """
+    Clase para definir el modelo Ciudadano
+    """
+    def __str__(self):
+        return self.usuario.get_full_name() + ' (' + self.usuario.get_username() + ')'
+
+
+class CiudadanoAdminPanel(admin.ModelAdmin):
+    """
+    Clase que define los campos a mostrar en el Panel de Administración para el listado de Ciudadanos
+    """
     list_display = ('usuario', 'nombre_completo', 'poblacion')
 
     def nombre_completo(self, obj):
         return obj.usuario.get_full_name()
 
 
-# Ciudadano
-class Ciudadano(Actor):
-    
-    def __str__(self):
-        return self.usuario.get_full_name() + ' (' + self.usuario.get_username() + ')'
-
-
-# Clase que define los campos a mostrar en el Panel de Administración para el listado de ciudadanos
-class CiudadanoAdmin(ActorAdmin):
-    pass
-
-
-# Funcionario
 class Funcionario(Actor):
+    """
+    Clase para definir el modelo Funcionario
+    """
+
     # Relaciones
     categorias = models.ManyToManyField(Categoria)
 
@@ -52,13 +63,20 @@ class Funcionario(Actor):
         return self.usuario.get_full_name() + ' (' + self.usuario.get_username() + ')'
 
 
-# Clase que define los campos a mostrar en el Panel de Administración para el listado de funcionarios
-class FuncionarioAdmin(ActorAdmin):
-    pass
+class FuncionarioAdminPanel(admin.ModelAdmin):
+    """
+    Clase que define los campos a mostrar en el Panel de Administración para el listado de Funcionarios
+    """
+    list_display = ('usuario', 'nombre_completo', 'poblacion')
+
+    def nombre_completo(self, obj):
+        return obj.usuario.get_full_name()
 
 
-# Administrador
 class Administrador(Actor):
+    """
+    Clase para definir el modelo Funcionario
+    """
 
     def __str__(self):
         return self.usuario.get_full_name() + ' (' + self.usuario.get_username() + ')'
@@ -67,6 +85,11 @@ class Administrador(Actor):
         verbose_name_plural = "Administradores"
 
 
-# Clase que define los campos a mostrar en el Panel de Administración para el listado de administradores
-class AdministradorAdmin(ActorAdmin):
-    pass
+class AdministradorAdmin(admin.ModelAdmin):
+    """
+    Clase que define los campos a mostrar en el Panel de Administración para el listado de Administradores
+    """
+    list_display = ('usuario', 'nombre_completo', 'poblacion')
+
+    def nombre_completo(self, obj):
+        return obj.usuario.get_full_name()
