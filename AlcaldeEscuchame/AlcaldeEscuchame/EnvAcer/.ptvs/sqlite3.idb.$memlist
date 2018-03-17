@@ -11,7 +11,7 @@ Timestamp
 SQLITE_PRAGMA
 InterfaceError
 threadsafety
-connect
+DataError
 SQLITE_DROP_INDEX
 DatabaseError
 enable_callback_tracebacks
@@ -44,7 +44,7 @@ adapters
 SQLITE_DROP_TEMP_TABLE
 SQLITE_DENY
 SQLITE_DETACH
-DataError
+connect
 time
 Warning
 SQLITE_CREATE_TEMP_TRIGGER
