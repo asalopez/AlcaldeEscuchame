@@ -6,9 +6,12 @@ Using Django 1.11
 #encoding:utf-8
 
 import os
+from django_heroku.core import settings
 from ctypes import cast
 import posixpath
 from decouple import config
+import dj_database_url
+import django_heroku
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', cast=bool)
 
-ALLOWED_HOSTS = ['testserver', 'localhost']
+ALLOWED_HOSTS = ['testserver', 'localhost', 'alcalde-escuchame.herokuapp.com']
 #ALLOWED_HOSTS = []
 
 
@@ -48,6 +51,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE_CLASSES = [
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -82,14 +86,24 @@ WSGI_APPLICATION = 'AlcaldeEscuchame.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
+#DATABASES = {
+#    'default': {
+#        'ENGINE': config('DB_ENGINE'),
+#        'NAME': config('DB_NAME'),
+#        'USER': config('DB_USER'),
+#        'PASSWORD': config('DB_PASS'),
+#        'HOST': '127.0.0.1',
+#	    'PORT': '5432',	# Puerto dado en pgAdmin para la BD.
+#    }
+#}
 DATABASES = {
     'default': {
-        'ENGINE': config('DB_ENGINE'),
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASS'),
-        'HOST': '127.0.0.1',
-	    'PORT': '5432',	# Puerto dado en pgAdmin para la BD.
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'd1mqk8ir5nn4nj',
+        'USER': 'hrfhrjlrqrykoi',
+        'PASSWORD': '0c96a650abafd07226b7c6f1fc73d8fdd525a0222db8d1a0f023a33766e38598',
+        'HOST': 'ec2-54-247-95-125.eu-west-1.compute.amazonaws.com',
+        'PORT': '5432',
     }
 }
 
@@ -133,9 +147,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+#STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 STATIC_URL = '/static/'
 
-STATIC_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['static']))
+STATICFILES_DIRS = (
+    os.path.join(PROJECT_ROOT, 'static'),
+)
+STATICFILES_STORAGE = 'whitenoise.django.GzipManifestStaticFilesStorage' 
 
 MEDIA_ROOT = posixpath.join(*(BASE_DIR.split(os.path.sep) + ['carga']))
 MEDIA_URL = 'http://127.0.0.1:8000/media/'
+
+django_heroku.settings(locals())
