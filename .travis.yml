@@ -5,4 +5,6 @@ deploy:
     secure: DPx/PVE2iyhILFgRjBO6GPOIuVu+M45r3ne0ogGa/cfSWmg4ek+YV+viet2p/ZDC+57wqYSApO1iCk2PCx/cbFobdtGkgheAaIsNwnd8UAdayFvxDgFKGsPBiw46CegU7EFFKxkWuGci4rYfUMNxfsXgVeVdalBbw2ms8vC4x9pHtn5MJGeidaeYP1cVZaRVBNyjcMWXxuq40GgsgHmACoZ2zDY9hKXAr+ZzXe0CplC8WpmlCO5dIskuTBzwTPzGkHqneKbTdex5jO6lQ+uCTKe5uojh0Td0tYaJqiyLsNvf2K7uGcpUMgBDW3EQtl/4Wu2sp1dGPuUq8Qh4Czj+91xDgBrYs8RCmKYKLfIe88sLI1ejVZkC7R6alUj/SRb94i6saL/kSPNyvcJnyaykTeS9s0VV1IzlBjOJ/BhK8yMtzigomqPEOoCyuG4TZvj/1kYgHwoGuGyU7Hs0KMt1Q4uBrax+U6OItlsnYX2gFNdPMZfqaVT+zNExPtEYVk0qZZXnvkMchYdQt022RbdhzITbQN6KrG43eLccaLSv9MFns14AIP2KaAjr7O2GjR4DBcDsF6X48Wy2hIB3VqtMsMkxodJ/K6VCwTMJREPm8T6EGzT2m25iGyKvf+ddY70nL1KrZKrpSU+2di0xm8nElcMuUdSuQhaw+Y9azjMNSS4=
   app: alcalde-escuchame
   on:
+    branch: master
+    python: "3.6"
     repo: asalopez/AlcaldeEscuchame
